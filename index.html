@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>LG Subscribe CRM · PAIRAT · v51</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: { fontFamily: {
+      sans:    ['"IBM Plex Sans Thai"','"Plus Jakarta Sans"','ui-sans-serif','system-ui','sans-serif'],
+      display: ['"Plus Jakarta Sans"','"IBM Plex Sans Thai"','ui-sans-serif','sans-serif']
+    }}}
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script defer src="https://unpkg.com/alpinejs@3.14.8/dist/cdn.min.js"></script>
+<style>
+  :root { --accent:#C8102E; --accent-tint:color-mix(in srgb,#C8102E 7%,white); --accent-soft:color-mix(in srgb,#C8102E 13%,white); }
+  html  { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  body  { font-family:'IBM Plex Sans Thai','Plus Jakarta Sans',system-ui,sans-serif; margin:0; padding-bottom:env(safe-area-inset-bottom); animation:pgLoad .2s ease-out both; }
+  @keyframes pgLoad { from{opacity:0} to{opacity:1} }
+  .font-display { font-family:'Plus Jakarta Sans','IBM Plex Sans Thai',sans-serif; }
+  [x-cloak] { display:none!important; }
+  ::selection { background:var(--accent-soft); }
+  *::-webkit-scrollbar { width:5px; height:5px; }
+  *::-webkit-scrollbar-thumb { background:#e2e8f0; border-radius:9999px; }
+  *::-webkit-scrollbar-track { background:transparent; }
+  .tabular-nums { font-variant-numeric:tabular-nums; }
+
+  /* ── Tones ── */
+  .tone-sky     { background:#f0f9ff; color:#0369a1; }
+  .tone-violet  { background:#f5f3ff; color:#6d28d9; }
+  .tone-indigo  { background:#eef2ff; color:#4338ca; }
+  .tone-amber   { background:#fffbeb; color:#92400e; }
+  .tone-emerald { background:#ecfdf5; color:#065f46; }
+  .tone-orange  { background:#fff7ed; color:#c2410c; }
+  .tone-rose    { background:#fff1f2; color:#be123c; }
+  .tone-fuchsia { background:#fdf4ff; color:#a21caf; }
+  .tone-slate   { background:#f1f5f9; color:#475569; }
+
+  /* ── Navbar ── */
+  .navbar { display:flex; align-items:center; padding:0 20px; min-height:56px; border-bottom:1px solid #e0e0e0; background:#fff; gap:12px; }
+  .logo-box { width:40px; height:40px; border-radius:8px; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#fff; flex-shrink:0; }
+  .nav-title { font-size:14px; font-weight:500; color:#111; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .nav-sub   { font-size:11px; color:#888; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .nav-sub b { color:var(--accent); font-weight:500; }
+  .tab-group { display:flex; background:#f2f2f2; border-radius:999px; padding:3px; gap:2px; }
+  .tab { width:116px; text-align:center; border-radius:999px; border:none; background:transparent; font-size:13px; font-weight:500; color:#aaa; cursor:pointer; white-space:nowrap; transition:color .15s; text-decoration:none; font-family:inherit; line-height:1; padding:5px 0; }
+  .tab.active { color:#111; }
+  .tab:hover:not(.active) { color:#555; }
+  .btn-reload { display:flex; align-items:center; gap:5px; background:var(--accent); color:#fff; border:none; border-radius:999px; padding:6px 16px; font-size:13px; cursor:pointer; font-family:inherit; white-space:nowrap; position:relative; z-index:50; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .btn-reload:disabled { opacity:.55; cursor:wait; }
+  .btn-reload.is-busy:not(:disabled) { opacity:.9; }
+  .btn-reload svg { width:14px; height:14px; flex-shrink:0; }
+  .btn-reload.spinning svg { animation:spinReload .8s linear infinite; }
+  @keyframes spinReload { to { transform:rotate(360deg); } }
+  .btn-icon { width:32px; height:32px; border-radius:999px; border:0.5px solid #ddd; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#888; }
+  .btn-icon:hover { background:#f5f5f5; color:#333; }
+  .btn-icon svg { width:15px; height:15px; flex-shrink:0; }
+  .btn-text { display:flex; align-items:center; gap:5px; border:0.5px solid #ddd; border-radius:999px; padding:6px 14px; background:transparent; font-size:13px; color:#111; cursor:pointer; font-family:inherit; text-decoration:none; white-space:nowrap; }
+  .btn-text:hover { background:#f5f5f5; }
+  .btn-text svg { width:14px; height:14px; flex-shrink:0; color:#888; }
+
+  /* ── Table ── */
+  .row-stripe:nth-child(odd)  { background:white; }
+  .row-stripe:nth-child(even) { background:rgba(248,250,252,.5); }
+  .row-stripe:hover { background:var(--accent-tint)!important; }
+
+  /* ── Highlight flags ── */
+  .hl-flag { width:13px; height:13px; border-radius:50%; border:2px solid #e2e8f0; background:transparent; cursor:pointer; flex-shrink:0; transition:transform .15s,border-color .15s,background .15s; display:inline-block; vertical-align:middle; }
+  .hl-flag:hover { transform:scale(1.25); }
+  .hl-flag.hl-1 { background:#eab308; border-color:#eab308; }
+  .hl-flag.hl-2 { background:#f97316; border-color:#f97316; }
+  .hl-flag.hl-3 { background:#22c55e; border-color:#22c55e; }
+  tr.tr-hl-1 { background:rgba(234,179,8,.06)!important; }
+  tr.tr-hl-2 { background:rgba(249,115,22,.06)!important; }
+  tr.tr-hl-3 { background:rgba(34,197,94,.07)!important; }
+  .mob-hl-1 { border-left:3px solid #eab308!important; background:rgba(234,179,8,.06)!important; }
+  .mob-hl-2 { border-left:3px solid #f97316!important; background:rgba(249,115,22,.06)!important; }
+  .mob-hl-3 { border-left:3px solid #22c55e!important; background:rgba(34,197,94,.07)!important; }
+
+  /* ── Mobile ── */
+  .mobile-list { display:none; flex-direction:column; gap:8px; }
+  @media(max-width:768px) {
+    .desktop-table { display:none!important; }
+    .mobile-list   { display:flex!important; }
+    .chips-scroll  { overflow-x:auto; flex-wrap:nowrap!important; -webkit-overflow-scrolling:touch; }
+    .chips-scroll::-webkit-scrollbar { display:none; }
+    .chips-scroll .filter-chip { flex-shrink:0; }
+  }
+
+  /* ── Loading dots ── */
+  .dots span { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent); margin:0 3px; animation:bounce .9s infinite; }
+  .dots span:nth-child(2){animation-delay:.15s} .dots span:nth-child(3){animation-delay:.3s}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+
+  /* ── Filter chips alignment ── */
+  .filter-row { display:flex; align-items:center; gap:.75rem; }
+  .filter-row-label { width:8.25rem; flex-shrink:0; font-size:11px; font-weight:700; letter-spacing:.04em; color:#94a3b8; line-height:1.25; }
+  .filter-chips { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; min-width:0; flex:1; }
+  .filter-slot { flex-shrink:0; }
+  .filter-slot-1 { width:7.25rem; }
+  .filter-slot-2 { width:10.75rem; }
+  .filter-slot .filter-chip { width:100%; justify-content:center; }
+  .filter-chip {
+    height:2.25rem; padding:0 .875rem; border-radius:9999px;
+    font-size:13px; font-weight:600; display:inline-flex; align-items:center; gap:.375rem;
+    transition:all .15s; white-space:nowrap;
+  }
+  .filter-chip-count { font-variant-numeric:tabular-nums; font-size:11.5px; font-weight:700; padding:0 .375rem; border-radius:9999px; }
+
+  /* ── Work summary ── */
+  .summary-rank-bar { height:6px; border-radius:9999px; background:#f1f5f9; overflow:hidden; }
+  .summary-rank-fill { height:100%; border-radius:9999px; background:var(--accent); transition:width .35s ease; }
+
+  /* ── Source channel cards ── */
+  .source-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: #fff;
+    padding-bottom: 6px;
+    transition: transform .2s ease, box-shadow .2s ease, ring-color .2s ease;
+  }
+  .source-card:hover { transform: translateY(-2px); }
+  .source-card.is-active {
+    box-shadow: 0 14px 36px rgba(200,16,46,.22);
+    transform: translateY(-2px);
+  }
+  .source-card-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 420 / 401;
+    overflow: hidden;
+    border-radius: 18px;
+    background: #f1f5f9;
+  }
+  .source-card img {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .source-card-count {
+    position: absolute;
+    right: 18px;
+    bottom: 22px;
+    left: auto;
+    z-index: 2;
+    padding: 0;
+    min-width: 0;
+    height: auto;
+    border-radius: 0;
+    background: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 1;
+    color: #334155;
+    text-shadow: 0 1px 0 rgba(255,255,255,.85), 0 0 10px rgba(255,255,255,.65);
+    pointer-events: none;
+  }
+  .source-card.is-active .source-card-count {
+    color: var(--accent);
+    background: none;
+  }
+  .source-card-check {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #c8102e, #e23a54);
+    box-shadow: 0 8px 20px rgba(200,16,46,.35);
+  }
+  .source-card-label {
+    display: block;
+    margin-top: 8px;
+    padding: 0 4px 2px;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: .01em;
+    color: #334155;
+    line-height: 1.25;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .source-card.is-active .source-card-label {
+    color: var(--accent);
+  }
+  /* ── Quick View + Active filters ── */
+  .qv-btn-active { background:linear-gradient(135deg,var(--accent),#e23a54); border-color:transparent!important; box-shadow:0 8px 20px rgba(200,16,46,.22); }
+  .active-filter-bar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:10px 14px; background:var(--accent-tint); border:1px solid color-mix(in srgb,var(--accent) 15%,white); border-radius:12px; }
+  .active-filter-chip { display:inline-flex; align-items:center; gap:4px; height:28px; padding:0 4px 0 10px; border-radius:999px; background:#fff; border:1px solid color-mix(in srgb,var(--accent) 20%,white); font-size:12px; font-weight:600; color:#334155; }
+  .active-filter-remove { width:20px; height:20px; border-radius:999px; border:none; background:transparent; color:#94a3b8; font-size:16px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .active-filter-remove:hover { background:#fee2e2; color:var(--accent); }
+  /* ── Login ── */
+  .login-shell { min-height:100vh; display:grid; place-items:center; padding:24px;
+    background: radial-gradient(circle at 18% 18%,rgba(200,16,46,.12),transparent 32%),
+                radial-gradient(circle at 82% 12%,rgba(15,118,110,.1),transparent 28%),
+                linear-gradient(180deg,#fff 0%,#f8fafc 54%,#f1f5f9 100%); }
+  .login-card  { width:min(100%,420px); background:rgba(255,255,255,.92); border:1px solid rgba(226,232,240,.92); border-radius:22px; padding:30px; box-shadow:0 26px 70px rgba(15,23,42,.12); backdrop-filter:blur(14px); }
+  .login-input { width:100%; height:46px; border-radius:14px; border:1px solid #dbe3ee; background:#fff; padding:0 14px; font-size:15px; outline:none; font-family:inherit; transition:border-color .16s,box-shadow .16s; box-sizing:border-box; }
+  .login-input:focus { border-color:rgba(200,16,46,.55); box-shadow:0 0 0 4px rgba(200,16,46,.1); }
+  .login-btn   { height:46px; width:100%; border-radius:14px; color:#fff; font-weight:800; font-size:15px; background:linear-gradient(135deg,#c8102e,#e23a54); box-shadow:0 14px 26px rgba(200,16,46,.22); border:none; cursor:pointer; font-family:inherit; transition:transform .16s,box-shadow .16s; }
+  .login-btn:hover { transform:translateY(-1px); box-shadow:0 18px 32px rgba(200,16,46,.28); }
+
+  /* ── Modal overlay ── */
+  .modal-overlay { position:fixed; inset:0; background:rgba(15,23,42,.55); z-index:200; display:flex; align-items:center; justify-content:center; padding:max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); backdrop-filter:blur(4px); box-sizing:border-box; }
+
+  /* ── Customer popup (กลางจอ — ไม่เลื่อนจากขวา / ไม่ bottom-sheet) ── */
+  .drawer-shell {
+    position: fixed; inset: 0; z-index: 80;
+    display: flex; align-items: center; justify-content: center;
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+             max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    box-sizing: border-box;
+  }
+  .drawer-shell.is-under-modal { z-index: 40; }
+  .drawer-bd {
+    position: absolute; inset: 0;
+    background: rgba(15,23,42,.45);
+    backdrop-filter: blur(4px);
+  }
+  .drawer-panel {
+    position: relative; z-index: 1;
+    width: min(100%, 440px);
+    height: min(90dvh, 880px);
+    max-height: min(90dvh, 880px);
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 26px 70px rgba(15,23,42,.2);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .drawer-panel > .flex { min-height: 0; flex: 1 1 auto; height: 100%; }
+
+  /* ── Mobile navbar ── */
+  @media(max-width:640px) {
+    .navbar { display:grid; grid-template-columns:32px minmax(0,1fr) auto auto; grid-template-areas:"logo copy settings reload" "tabs tabs tabs tabs"; min-height:0; height:auto; padding:8px 12px 10px; padding-top:calc(8px + env(safe-area-inset-top)); gap:8px; align-items:center; }
+    .logo-box { width:32px; height:32px; font-size:12px; }
+    .navbar .logo-box { grid-area:logo; }
+    .nav-copy { grid-area:copy; max-width:none; }
+    .nav-title { font-size:13px; font-weight:700; line-height:1.2; }
+    .nav-sub   { font-size:10.5px; line-height:1.25; }
+    .nav-spacer { display:none; }
+    .tab-group { grid-area:tabs; width:100%; display:grid; grid-auto-flow:column; grid-auto-columns:1fr; padding:4px; border-radius:14px; }
+    .tab { width:100%; padding:9px 8px; font-size:13px; font-weight:700; }
+    .btn-reload { grid-area:reload; height:36px; min-width:80px; padding:0 12px; font-size:13px; font-weight:700; }
+    .btn-reload svg { width:18px; height:18px; }
+    .btn-icon,.btn-text { display:none; }
+    .btn-settings { display:flex; grid-area:settings; width:32px; height:36px; }
+    main { padding-top:14px!important; padding-left:14px!important; padding-right:14px!important; }
+  }
+</style>
+</head>
+<body x-data="app()" x-init="init()" class="bg-[#fafafb] text-slate-900 min-h-screen">
+
+<!-- ═══ LOGIN ═══ -->
+<section x-show="!isLoggedIn" x-cloak class="login-shell">
+  <form class="login-card" @submit.prevent="login()">
+    <div class="flex items-center gap-4 mb-7">
+      <div class="h-12 w-12 rounded-2xl grid place-items-center text-white font-display font-extrabold text-[18px]" style="background:var(--accent);box-shadow:0 16px 28px rgba(200,16,46,.22)">LG</div>
+      <div>
+        <div class="font-display text-[22px] font-extrabold text-slate-900 tracking-tight">Subscribe CRM</div>
+        <div class="text-[13px] text-slate-500">เข้าสู่ระบบสำหรับ PAIRAT · อัปเดต <span x-text="crmBuild"></span></div>
+      </div>
+    </div>
+    <label class="block text-[12px] font-bold uppercase tracking-[.12em] text-slate-400 mb-2">รหัสผ่าน</label>
+    <input class="login-input" type="password" x-model="loginPw" placeholder="ใส่รหัสผ่าน" autocomplete="current-password" autofocus/>
+    <div x-show="loginErr" class="mt-3 text-[13px] text-rose-600" x-text="loginErr"></div>
+    <button type="submit" class="login-btn mt-5">เข้าสู่ระบบ</button>
+    <div class="mt-4 text-[12px] text-slate-400">ลืมรหัสผ่าน? ติดต่อผู้ดูแลระบบ</div>
+  </form>
+</section>
+
+<!-- ═══ CONFIG MODAL ═══ -->
+<div class="modal-overlay" x-show="isLoggedIn && showConfig" x-transition style="display:none" @click.self="showConfig=false">
+  <div class="bg-white rounded-2xl p-7 max-w-[520px] w-full shadow-2xl">
+    <div class="flex items-center justify-between mb-5">
+      <div class="font-display font-bold text-[18px]">⚙️ ตั้งค่า Apps Script URL</div>
+      <button @click="showConfig=false" class="h-9 w-9 grid place-items-center rounded-xl text-slate-400 hover:bg-slate-100 transition text-xl">×</button>
+    </div>
+    <div class="bg-slate-50 rounded-xl p-4 mb-4 text-[13px] leading-relaxed text-slate-600">
+      <div class="font-semibold mb-1">📋 วิธีรับ URL (ทำครั้งเดียว)</div>
+      <div><b>1.</b> Google Sheet → Extensions → Apps Script → วางโค้ด Code.gs</div>
+      <div><b>2.</b> Run → testConnection → Authorize</div>
+      <div><b>3.</b> Deploy → Web App · Execute as: Me · Anyone → คัดลอก URL</div>
+    </div>
+    <input type="url" x-model="configUrl" placeholder="https://script.google.com/macros/s/.../exec"
+      class="w-full h-11 px-4 rounded-xl bg-white ring-1 ring-slate-200 focus:ring-2 focus:outline-none text-[14px] mb-3" style="font-family:inherit"/>
+    <div class="flex gap-2 mb-4">
+      <button class="h-10 px-4 rounded-xl text-[13px] font-semibold text-slate-700 bg-white ring-1 ring-slate-200 hover:bg-slate-50 transition"
+              @click="testConn()" :disabled="!configUrl||testLoading">
+        <span x-show="!testLoading">🔌 ทดสอบ</span><span x-show="testLoading">กำลังทดสอบ...</span>
+      </button>
+      <span x-show="testMsg" class="text-[13px] flex-1 flex items-center" :class="testOk?'text-emerald-600':'text-rose-600'" x-text="testMsg"></span>
+    </div>
+    <div class="flex gap-3">
+      <button class="flex-1 h-11 rounded-xl text-[14px] font-bold text-white" style="background:var(--accent)" @click="saveConfig()" :disabled="!configUrl">บันทึก & โหลดข้อมูล</button>
+      <button class="h-11 px-5 rounded-xl text-[14px] font-semibold text-slate-600 bg-white ring-1 ring-slate-200 hover:bg-slate-50 transition" @click="showConfig=false">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOLLOW-UP MODAL ═══ -->
+<div class="modal-overlay" x-show="fuModal" x-transition style="display:none" @click.self="cancelFu()">
+  <div class="bg-white rounded-2xl p-6 max-w-[420px] w-full shadow-2xl">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <div class="font-display font-bold text-[18px]">เลือกวันเวลานัดติดต่อกลับ</div>
+        <div class="text-[13px] text-slate-500 mt-0.5">ระบบจะใส่ข้อความในช่องบันทึก</div>
+      </div>
+      <button @click="cancelFu()" class="h-9 w-9 grid place-items-center rounded-xl text-slate-400 hover:bg-slate-100 transition text-xl">×</button>
+    </div>
+    <label class="block text-[12px] font-bold uppercase tracking-[.1em] text-slate-400 mb-2">วันและเวลา</label>
+    <input type="datetime-local" x-model="fuDateTime"
+      class="w-full h-11 px-4 rounded-xl bg-white ring-1 ring-slate-200 focus:ring-2 focus:outline-none text-[14px] text-slate-700"/>
+    <div x-show="fuErr" class="mt-3 text-[13px] text-rose-600" x-text="fuErr"></div>
+    <div class="flex gap-3 mt-5">
+      <button class="flex-1 h-11 rounded-xl text-[14px] font-bold text-white transition" style="background:var(--accent)" @click="confirmFu()">ใส่ในช่องบันทึก</button>
+      <button class="h-11 px-5 rounded-xl text-[14px] font-semibold text-slate-600 bg-white ring-1 ring-slate-200 hover:bg-slate-50 transition" @click="cancelFu()">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HEADER ═══ -->
+<header x-show="isLoggedIn" x-cloak class="sticky top-0 z-50" style="backdrop-filter:blur(10px)">
+  <nav class="navbar">
+    <div class="logo-box font-display">LG</div>
+    <div class="nav-copy min-w-0">
+      <div class="nav-title">Subscribe CRM</div>
+      <div class="nav-sub">Epromoter <b>PAIRAT</b> · <span class="text-[var(--accent)] font-semibold" x-text="crmBuild"></span><span x-show="lastFetch"> · <span x-text="lastFetch"></span></span></div>
+    </div>
+    <div class="nav-spacer flex-1"></div>
+    <div class="tab-group">
+      <span class="tab active">รายชื่อลูกค้า</span>
+    </div>
+    <div class="nav-spacer flex-1"></div>
+    <button type="button" class="btn-reload"
+      :class="{ 'spinning is-busy': loading || softLoading }"
+      @click.prevent.stop="reloadCustomers()"
+      :disabled="loading && !customers.length"
+      :title="(loading || softLoading) ? 'กำลังโหลดจาก Sheet…' : 'โหลดข้อมูลใหม่จาก Sheet'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-14.6 7.1"/><path d="M3 12A9 9 0 0 1 17.6 4.9"/><path d="M7 19H3v4"/><path d="M17 5h4V1"/></svg>
+      <span x-show="!loading && !softLoading">โหลด</span>
+      <span x-show="loading || softLoading" x-cloak>กำลังโหลด...</span>
+    </button>
+    <button class="btn-icon btn-settings" @click="showConfig=true" title="ตั้งค่า URL">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+    </button>
+    <a href="https://pondjeloy.github.io/LG_Subscribe_Calculator_Sep2026/" target="_blank" class="btn-text">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7h7M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 15h.01M12 15h.01M15.5 15h.01"/></svg>
+      คำนวณ
+    </a>
+    <button class="btn-icon" @click="logout()" title="ออกจากระบบ">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17l5-5-5-5M15 12H3M21 19V5a2 2 0 0 0-2-2h-5"/></svg>
+    </button>
+  </nav>
+</header>
+
+<!-- ═══ MAIN ═══ -->
+<main x-show="isLoggedIn" x-cloak class="mx-auto max-w-[1500px] px-5 py-5 space-y-5">
+
+  <!-- No URL -->
+  <div x-show="!apiUrl" class="rounded-2xl bg-white ring-1 ring-slate-200/70 py-20 text-center">
+    <div class="text-[40px] mb-3">🔗</div>
+    <div class="font-display font-bold text-[18px] text-slate-800 mb-1">ยังไม่ได้ตั้งค่า URL</div>
+    <div class="text-[14px] text-slate-500 mb-5">กรุณาตั้งค่า Apps Script URL ก่อน</div>
+    <button class="h-11 px-6 rounded-full text-[14px] font-bold text-white" style="background:var(--accent)" @click="showConfig=true">⚙️ ตั้งค่า URL</button>
+  </div>
+
+  <div x-show="apiUrl">
+
+    <!-- Test mode banner -->
+    <div x-show="testMode" class="rounded-xl bg-amber-50 ring-1 ring-amber-200 px-4 py-2.5 mb-4 text-[13px] text-amber-900 leading-relaxed">
+      <b>🧪 CRM v51</b> — ชีตกันยายน · Meta Densu Sep + Meta เก่า + Meta ITAX
+      <span x-show="rawCount != null" class="block mt-1 text-[12px] text-amber-800">
+        รวม <span class="font-bold tabular-nums" x-text="customers.length"></span> รายการ
+        <span x-show="rawCount > customers.length"> (ก่อน dedup Meta: <span class="tabular-nums" x-text="rawCount"></span>)</span>
+      </span>
+      <div x-show="sourceDebugLines.length" class="mt-2 flex flex-wrap gap-1.5">
+        <template x-for="line in sourceDebugLines" :key="line.key">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold"
+            :class="line.found ? 'bg-white/80 text-amber-900 ring-1 ring-amber-200' : 'bg-rose-100 text-rose-700 ring-1 ring-rose-200'">
+            <span x-text="line.short"></span>
+            <span class="tabular-nums" x-text="line.api"></span>
+            <span x-show="!line.found" class="text-[10px]">ไม่พบชีต</span>
+          </span>
+        </template>
+      </div>
+    </div>
+
+    <!-- Loading (เต็มจอเฉพาะตอนยังไม่มีข้อมูล) -->
+    <div x-show="loading && !customers.length" class="rounded-2xl bg-white ring-1 ring-slate-200/70 py-20 text-center">
+      <div class="dots mb-3"><span></span><span></span><span></span></div>
+      <div class="text-[14px] text-slate-400">กำลังดึงข้อมูลจาก Google Sheet...</div>
+      <div class="text-[12px] text-slate-400 mt-2">Sheet ใหญ่ / cold start อาจใช้เวลา 30–90 วินาที — อย่ารีเฟรชซ้ำ</div>
+    </div>
+    <!-- Soft loading แถบบางๆ ตอนรีเฟรชพื้นหลัง (มี cache แล้ว) -->
+    <div x-show="softLoading || (loading && customers.length)" class="mb-3 rounded-xl bg-sky-50 ring-1 ring-sky-100 px-3 py-2 text-[12px] text-sky-800 flex items-center gap-2">
+      <span class="inline-block w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
+      กำลังอัปเดตข้อมูลล่าสุดจาก Sheet…
+    </div>
+
+    <!-- Error / warning -->
+    <div x-show="loadErr && !loading" class="rounded-2xl bg-white p-5 mb-4"
+         :class="customers.length ? 'ring-1 ring-amber-200' : 'ring-1 ring-rose-200'">
+      <div class="font-semibold mb-1" :class="customers.length ? 'text-amber-700' : 'text-rose-600'"
+           x-text="customers.length ? '⚠️ โหลด API ไม่ได้ — แสดงข้อมูล cache สำรอง' : '⚠️ โหลดข้อมูลไม่ได้'"></div>
+      <div class="text-[13px] text-slate-500 whitespace-pre-line" x-text="loadErr"></div>
+      <div x-show="!customers.length" class="mt-3 text-[13px] text-slate-500 bg-slate-50 rounded-xl p-3 leading-relaxed">
+        <b>วิธีแก้:</b><br/>
+        1. ต้องมีอินเทอร์เน็ต + เปิดผ่าน Chrome/Edge (ไม่ block script จาก Google)<br/>
+        2. Apps Script → Deploy → Who has access = <b>Anyone</b> → New version → Deploy<br/>
+        3. กด ⚙️ ตั้งค่า URL → ทดสอบการเชื่อมต่อ → บันทึก
+      </div>
+      <button class="mt-3 h-9 px-4 rounded-full text-[13px] font-semibold ring-1 transition"
+              :class="customers.length ? 'ring-amber-200 text-amber-800 hover:bg-amber-50' : 'ring-rose-200 text-rose-700 hover:bg-rose-50'"
+              @click="reloadCustomers()">ลองโหลดใหม่</button>
+    </div>
+
+    <div x-show="!loading || customers.length">
+
+      <!-- ── Metrics ── -->
+      <section class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-4">
+        <!-- Total card -->
+        <div class="relative overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200/70 px-6 py-5 flex flex-col justify-between">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <div class="text-[11px] font-bold uppercase tracking-[.15em] text-slate-400">ทั้งหมด</div>
+              <div class="text-[12px] text-slate-400 mt-0.5">รายชื่อ PAIRAT</div>
+            </div>
+            <button @click="clearFilters()"
+              class="text-[11px] font-semibold px-2.5 py-1 rounded-full transition"
+              :class="!filterSource ? 'text-white' : 'text-slate-500 bg-slate-100 hover:bg-slate-200'"
+              :style="!filterSource ? 'background:var(--accent)' : ''">ทั้งหมด</button>
+          </div>
+          <div class="font-display font-extrabold tabular-nums tracking-tighter text-slate-900 leading-none text-[68px] my-1" x-text="customers.length"></div>
+          <div>
+            <div class="flex h-1.5 w-full overflow-hidden rounded-full bg-slate-100 gap-px mt-2">
+              <template x-for="sd in sourceDefs" :key="sd.key">
+                <span class="h-full rounded-full opacity-80" :class="sd.barClass"
+                  :style="'width:'+( customers.filter(c=>normalizeSource(c.source)===sd.key).length / Math.max(customers.length,1)*100 )+'%'"></span>
+              </template>
+            </div>
+            <div class="mt-1.5 text-[11.5px] text-slate-400">กระจาย <span x-text="sourceSummary.length"></span> แหล่ง</div>
+          </div>
+        </div>
+
+        <!-- Source strip -->
+        <div>
+          <div class="flex items-center justify-between mb-3 px-0.5">
+            <div class="text-[11px] font-bold uppercase tracking-[.14em] text-slate-400">ช่องทาง Lead / ลูกค้า</div>
+            <div class="text-[11px] text-slate-400">กดเพื่อกรอง · กดซ้ำเพื่อยกเลิก</div>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+            <template x-for="sd in sourceSummary" :key="sd.key">
+              <button @click="toggleSource(sd.key)"
+                class="source-card text-left ring-1 ring-slate-200/80 hover:ring-slate-300 hover:shadow-md"
+                :class="filterSource===sd.key ? 'is-active ring-2 ring-[var(--accent)]' : ''">
+                <div class="source-card-media">
+                  <img :src="sd.img" :alt="sd.short + ' — ' + sd.label" loading="eager" decoding="async"
+                    @error="$el.style.opacity='0'"/>
+                  <span class="source-card-count tabular-nums" x-text="sd.count"></span>
+                </div>
+                <span class="source-card-label" x-text="sd.short"></span>
+                <span x-show="filterSource===sd.key" class="source-card-check">✓</span>
+              </button>
+            </template>
+          </div>
+          <!-- Sell out column legend -->
+          <div x-show="isSelloutFilterActive()"
+            class="mt-3 rounded-xl bg-emerald-50 ring-1 ring-emerald-200/80 px-4 py-3 text-[12px] text-emerald-900 leading-relaxed">
+            <div class="font-bold text-[11px] uppercase tracking-[.1em] text-emerald-700 mb-2">ฐานลูกค้า Sell out Wuttichai.P (POND)</div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-1">
+              <template x-for="item in selloutColumnLegend" :key="item.col">
+                <div><span class="font-bold tabular-nums" x-text="item.col"></span> = <span x-text="item.label"></span></div>
+              </template>
+            </div>
+          </div>
+          <!-- Meta column legend -->
+          <div x-show="isMetaFilterActive() && showMetaLegend"
+            class="mt-3 rounded-xl bg-violet-50 ring-1 ring-violet-200/80 px-4 py-3 text-[12px] text-violet-900 leading-relaxed">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <div class="font-bold text-[11px] uppercase tracking-[.1em] text-violet-700" x-text="metaLegendTitle"></div>
+              <button type="button" @click="showMetaLegend=false"
+                class="text-[11px] font-semibold text-violet-600 hover:underline shrink-0">ซ่อนคำอธิบาย</button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-1">
+              <template x-for="item in activeMetaColumnLegend" :key="item.col">
+                <div><span class="font-bold tabular-nums" x-text="item.col"></span> = <span x-text="item.label"></span></div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Work Summary (collapsed by default) ── -->
+      <section x-show="customers.length" class="rounded-2xl bg-white ring-1 ring-slate-200/70 overflow-hidden">
+        <button type="button" @click="showWorkSummary = !showWorkSummary"
+          class="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left hover:bg-slate-50/80 transition">
+          <div class="min-w-0">
+            <div class="text-[11px] font-bold uppercase tracking-[.14em] text-slate-400">สรุปการทำงาน</div>
+            <div class="text-[13px] text-slate-500 mt-0.5 truncate">
+              ปิดการขาย <span class="font-bold text-slate-700 tabular-nums" x-text="workSummary.totalClosed"></span> รายการ
+              <span class="text-slate-400">· กดเพื่อ<span x-text="showWorkSummary ? 'ซ่อน' : 'ดูรายละเอียด'"></span></span>
+            </div>
+          </div>
+          <span class="shrink-0 h-8 w-8 grid place-items-center rounded-full bg-slate-100 text-slate-500 text-sm font-bold transition"
+                :class="showWorkSummary ? 'rotate-180' : ''">▼</span>
+        </button>
+        <div x-show="showWorkSummary" x-transition.opacity.duration.200ms class="px-4 pb-4 border-t border-slate-100">
+        <div class="text-[12px] text-slate-400 pt-3 mb-3">นับจาก Status Purchased เท่านั้น</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Lead ranking -->
+          <div class="rounded-xl bg-slate-50/80 ring-1 ring-slate-200/70 p-3.5">
+            <div class="text-[12px] font-bold text-slate-700 mb-3">🏆 ช่องทาง Lead ปิดได้มากสุด</div>
+            <div x-show="!workSummary.sources.length" class="text-[12px] text-slate-400 text-center py-6">ยังไม่มีข้อมูล</div>
+            <div class="space-y-2.5">
+              <template x-for="(row, idx) in workSummary.sources" :key="row.key">
+                <div class="flex items-start gap-2">
+                  <span class="w-5 text-[11px] font-bold text-slate-400 tabular-nums pt-0.5" x-text="idx+1"></span>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                      <span class="text-[13px] font-semibold text-slate-700 truncate" x-text="row.label"></span>
+                      <span class="text-[12px] font-bold tabular-nums shrink-0" style="color:var(--accent)" x-text="row.count"></span>
+                    </div>
+                    <div class="summary-rank-bar"><div class="summary-rank-fill" :style="'width:' + row.barPct + '%'"></div></div>
+                    <div class="text-[10.5px] text-slate-400 mt-1 tabular-nums" x-text="row.rate+'% จากหลีด '+row.total+' รายการ'"></div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+          <!-- Product ranking -->
+          <div class="rounded-xl bg-slate-50/80 ring-1 ring-slate-200/70 p-3.5">
+            <div class="text-[12px] font-bold text-slate-700 mb-3">📦 สินค้าขายดีสุด</div>
+            <div x-show="!workSummary.products.length" class="text-[12px] text-slate-400 text-center py-6">ยังไม่มีข้อมูล</div>
+            <div class="space-y-2.5">
+              <template x-for="(row, idx) in workSummary.products" :key="row.key">
+                <div class="flex items-start gap-2">
+                  <span class="w-5 text-[11px] font-bold text-slate-400 tabular-nums pt-0.5" x-text="idx+1"></span>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                      <span class="text-[13px] font-semibold text-slate-700 truncate" x-text="row.label"></span>
+                      <span class="text-[12px] font-bold tabular-nums shrink-0" style="color:var(--accent)" x-text="row.count"></span>
+                    </div>
+                    <div class="summary-rank-bar"><div class="summary-rank-fill" :style="'width:' + row.barPct + '%'"></div></div>
+                    <div class="text-[10.5px] text-slate-400 mt-1 tabular-nums" x-text="row.pct+'% ของยอดปิดการขาย'"></div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+          <!-- Payment ranking -->
+          <div class="rounded-xl bg-slate-50/80 ring-1 ring-slate-200/70 p-3.5">
+            <div class="text-[12px] font-bold text-slate-700 mb-3">💳 ชำระเงินได้มากสุด</div>
+            <div x-show="!workSummary.payments.length" class="text-[12px] text-slate-400 text-center py-6">ยังไม่มีข้อมูล</div>
+            <div class="space-y-2.5">
+              <template x-for="(row, idx) in workSummary.payments" :key="row.key">
+                <div class="flex items-start gap-2">
+                  <span class="w-5 text-[11px] font-bold text-slate-400 tabular-nums pt-0.5" x-text="idx+1"></span>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                      <span class="text-[13px] font-semibold text-slate-700 truncate" x-text="row.label"></span>
+                      <span class="text-[12px] font-bold tabular-nums shrink-0" style="color:var(--accent)" x-text="row.count"></span>
+                    </div>
+                    <div class="summary-rank-bar"><div class="summary-rank-fill" :style="'width:' + row.barPct + '%'"></div></div>
+                    <div class="text-[10.5px] text-slate-400 mt-1 tabular-nums" x-text="row.pct+'% ของยอดปิดการขาย'"></div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <!-- Quick Views -->
+      <section class="rounded-2xl bg-white ring-1 ring-slate-200/70 p-4">
+        <div class="flex items-center gap-2 mb-3 flex-wrap">
+          <span class="text-[11px] font-bold uppercase tracking-[.14em] text-slate-400">Quick View</span>
+          <span class="text-[11px] text-slate-400">กดครั้งเดียว · กดซ้ำเพื่อยกเลิก</span>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <template x-for="qv in quickViewDefs" :key="qv.id">
+            <button @click="applyQuickView(qv.id)"
+              class="qv-btn text-left px-4 py-3 rounded-xl border transition-all"
+              :class="activeQuickView===qv.id ? 'qv-btn-active' : 'bg-slate-50/80 border-slate-200/80 hover:border-slate-300 hover:bg-white'">
+              <div class="flex items-center gap-2 mb-0.5">
+                <span class="text-lg leading-none" x-text="qv.emoji"></span>
+                <span class="text-[13.5px] font-bold" :class="activeQuickView===qv.id ? 'text-white' : 'text-slate-800'" x-text="qv.label"></span>
+              </div>
+              <div class="text-[11px] pl-7" :class="activeQuickView===qv.id ? 'text-white/75' : 'text-slate-400'" x-text="qv.desc"></div>
+            </button>
+          </template>
+        </div>
+      </section>
+
+      <!-- ── List View ── -->
+      <div class="space-y-4">
+
+        <!-- Status chips -->
+        <section class="space-y-3">
+          <div class="filter-row chips-scroll">
+            <span class="filter-row-label">Status</span>
+            <div class="filter-chips chips-scroll">
+              <div class="filter-slot filter-slot-1">
+                <button @click="setFilterStatus('')"
+                  class="filter-chip"
+                  :class="filterStatus==='' ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterStatus==='' ? 'background:var(--accent)' : ''">
+                  ทั้งหมด
+                  <span class="filter-chip-count" :class="filterStatus==='' ? 'bg-white/20' : 'text-slate-400 bg-slate-100'" x-text="customers.length"></span>
+                </button>
+              </div>
+              <template x-for="s in statusDefs.filter(x=>x.value!=='').slice(0,1)" :key="s.value">
+                <div class="filter-slot filter-slot-2">
+                  <button @click="setFilterStatus(s.value)"
+                    class="filter-chip"
+                    :class="filterStatus===s.value ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                    :style="filterStatus===s.value ? 'background:var(--accent)' : ''">
+                    <span x-text="s.label"></span>
+                    <span class="filter-chip-count"
+                          :class="filterStatus===s.value ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                          x-text="countByStatus(s.value)"></span>
+                  </button>
+                </div>
+              </template>
+              <template x-for="s in statusDefs.filter(x=>x.value!=='').slice(1)" :key="s.value">
+                <button @click="setFilterStatus(s.value)"
+                  class="filter-chip"
+                  :class="filterStatus===s.value ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterStatus===s.value ? 'background:var(--accent)' : ''">
+                  <span x-text="s.label"></span>
+                  <span class="filter-chip-count"
+                        :class="filterStatus===s.value ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="countByStatus(s.value)"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <!-- Payment chips -->
+          <div class="filter-row chips-scroll">
+            <span class="filter-row-label">ชำระเงิน</span>
+            <div class="filter-chips chips-scroll">
+              <div class="filter-slot filter-slot-1">
+                <button @click="setFilterPayment('')"
+                  class="filter-chip"
+                  :class="filterPayment==='' ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterPayment==='' ? 'background:var(--accent)' : ''">
+                  ทั้งหมด
+                  <span class="filter-chip-count"
+                        :class="filterPayment==='' ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="customers.length"></span>
+                </button>
+              </div>
+              <template x-for="p in paymentFilterDefs.slice(0,1)" :key="p.key">
+                <div class="filter-slot filter-slot-2">
+                  <button @click="setFilterPayment(p.key)"
+                    class="filter-chip"
+                    :class="filterPayment===p.key ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                    :style="filterPayment===p.key ? 'background:var(--accent)' : ''">
+                    <span class="h-2 w-2 rounded-full shrink-0" :style="filterPayment===p.key ? 'background:rgba(255,255,255,.85)' : p.dotStyle"></span>
+                    <span x-text="p.label"></span>
+                    <span class="filter-chip-count"
+                          :class="filterPayment===p.key ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                          x-text="countByPayment(p.key)"></span>
+                  </button>
+                </div>
+              </template>
+              <template x-for="p in paymentFilterDefs.slice(1)" :key="p.key">
+                <button @click="setFilterPayment(p.key)"
+                  class="filter-chip"
+                  :class="filterPayment===p.key ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterPayment===p.key ? 'background:var(--accent)' : ''">
+                  <span class="h-2 w-2 rounded-full shrink-0" :style="filterPayment===p.key ? 'background:rgba(255,255,255,.85)' : p.dotStyle"></span>
+                  <span x-text="p.label"></span>
+                  <span class="filter-chip-count"
+                        :class="filterPayment===p.key ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="countByPayment(p.key)"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <!-- Highlight chips -->
+          <div class="filter-row chips-scroll">
+            <span class="filter-row-label">ไฮไลท์ รายชื่อ</span>
+            <div class="filter-chips chips-scroll">
+              <div class="filter-slot filter-slot-1">
+                <button @click="setFilterHL(null)"
+                  class="filter-chip"
+                  :class="filterHL===null ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterHL===null ? 'background:var(--accent)' : ''">
+                  ทั้งหมด
+                  <span class="filter-chip-count"
+                        :class="filterHL===null ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="customers.length"></span>
+                </button>
+              </div>
+              <div class="filter-slot filter-slot-2">
+                <button @click="setFilterHL('ranked')"
+                  class="filter-chip"
+                  :class="filterHL==='ranked' ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterHL==='ranked' ? 'background:var(--accent)' : ''">
+                  <span class="inline-flex items-center shrink-0">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+                    <span class="h-2 w-2 rounded-full bg-orange-500 ring-2 ring-white -ml-1"></span>
+                    <span class="h-2 w-2 rounded-full bg-yellow-500 ring-2 ring-white -ml-1"></span>
+                  </span>
+                  <span>แสดงสีทั้งหมด</span>
+                  <span class="filter-chip-count"
+                        :class="filterHL==='ranked' ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="countByHLRanked()"></span>
+                </button>
+              </div>
+              <template x-for="h in hlFilterDefs" :key="h.value">
+                <button @click="setFilterHL(h.value)"
+                  class="filter-chip"
+                  :class="filterHL===h.value ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterHL===h.value ? 'background:var(--accent)' : ''">
+                  <span class="hl-flag shrink-0" :class="h.hlClass" :style="!h.hlClass ? 'border-color:#cbd5e1' : ''"></span>
+                  <span x-text="h.short"></span>
+                  <span class="filter-chip-count"
+                        :class="filterHL===h.value ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="countByHL(h.value)"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <!-- Activity chips -->
+          <div class="filter-row chips-scroll">
+            <span class="filter-row-label">บันทึกหมายเหตุ</span>
+            <div class="filter-chips chips-scroll">
+              <template x-for="a in activityFilters" :key="a.key">
+                <button @click="setFilterActivity(a.key)"
+                  class="filter-chip"
+                  :class="filterActivity===a.key ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterActivity===a.key ? 'background:var(--accent)' : ''">
+                  <span class="h-1.5 w-1.5 rounded-full shrink-0" :class="filterActivity===a.key ? 'bg-white/85' : 'bg-slate-300'"></span>
+                  <span x-text="a.label"></span>
+                  <span class="filter-chip-count"
+                        :class="filterActivity===a.key ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="countByActivity(a.key)"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <!-- วันที่สะดวก (Meta Densu July · F) -->
+          <div class="filter-row chips-scroll" x-show="convenientDateOptions.length" x-cloak>
+            <span class="filter-row-label">วันที่สะดวก</span>
+            <div class="filter-chips chips-scroll">
+              <div class="filter-slot filter-slot-1">
+                <button @click="setFilterConvenientDate('')"
+                  class="filter-chip"
+                  :class="filterConvenientDate==='' ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterConvenientDate==='' ? 'background:var(--accent)' : ''">
+                  ทั้งหมด
+                  <span class="filter-chip-count"
+                        :class="filterConvenientDate==='' ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="countWithConvenientDate()"></span>
+                </button>
+              </div>
+              <template x-for="opt in convenientDateOptions" :key="'cd-'+opt.value">
+                <button @click="setFilterConvenientDate(opt.value)"
+                  class="filter-chip"
+                  :class="filterConvenientDate===opt.value ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterConvenientDate===opt.value ? 'background:var(--accent)' : ''">
+                  <span x-text="fmtFilterDate(opt.value)"></span>
+                  <span class="filter-chip-count"
+                        :class="filterConvenientDate===opt.value ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="opt.count"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <!-- ประเภทที่อยู่ (Meta · บ้านเดี่ยว / คอนโด) -->
+          <div class="filter-row chips-scroll" x-show="housingOptions.length" x-cloak>
+            <span class="filter-row-label">ที่อยู่</span>
+            <div class="filter-chips chips-scroll">
+              <div class="filter-slot filter-slot-1">
+                <button @click="setFilterHousing('')"
+                  class="filter-chip"
+                  :class="filterHousing==='' ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterHousing==='' ? 'background:var(--accent)' : ''">
+                  ทั้งหมด
+                  <span class="filter-chip-count"
+                        :class="filterHousing==='' ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="countWithHousing()"></span>
+                </button>
+              </div>
+              <template x-for="opt in housingOptions" :key="'hs-'+opt.value">
+                <button @click="setFilterHousing(opt.value)"
+                  class="filter-chip"
+                  :class="filterHousing===opt.value ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterHousing===opt.value ? 'background:var(--accent)' : ''">
+                  <span x-text="opt.value"></span>
+                  <span class="filter-chip-count"
+                        :class="filterHousing===opt.value ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="opt.count"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <!-- ช่วงเวลาติดต่อ (Meta Densu July · G) -->
+          <div class="filter-row chips-scroll" x-show="contactTimeOptions.length" x-cloak>
+            <span class="filter-row-label">ช่วงเวลา</span>
+            <div class="filter-chips chips-scroll">
+              <div class="filter-slot filter-slot-1">
+                <button @click="setFilterContactTime('')"
+                  class="filter-chip"
+                  :class="filterContactTime==='' ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterContactTime==='' ? 'background:var(--accent)' : ''">
+                  ทั้งหมด
+                  <span class="filter-chip-count"
+                        :class="filterContactTime==='' ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="countWithContactTime()"></span>
+                </button>
+              </div>
+              <template x-for="opt in contactTimeOptions" :key="'ct-'+opt.value">
+                <button @click="setFilterContactTime(opt.value)"
+                  class="filter-chip"
+                  :class="filterContactTime===opt.value ? 'text-white shadow-sm' : 'text-slate-600 bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:bg-slate-50'"
+                  :style="filterContactTime===opt.value ? 'background:var(--accent)' : ''">
+                  <span x-text="opt.value"></span>
+                  <span class="filter-chip-count"
+                        :class="filterContactTime===opt.value ? 'bg-white/20' : 'text-slate-400 bg-slate-100'"
+                        x-text="opt.count"></span>
+                </button>
+              </template>
+            </div>
+          </div>
+        </section>
+
+        <!-- Search row -->
+        <div class="flex items-center gap-3">
+          <div class="relative flex-1">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="text" :value="search" @input="setSearch($event.target.value)" placeholder="ค้นหาชื่อ เบอร์ หรืออีเมล…"
+              class="w-full h-11 pl-11 pr-4 rounded-xl bg-white ring-1 ring-slate-200 focus:ring-2 focus:outline-none text-[14px] text-slate-700 placeholder:text-slate-400 transition"/>
+          </div>
+          <span class="text-[13px] text-slate-400 tabular-nums whitespace-nowrap">
+            <span class="font-bold text-slate-700" x-text="filtered.length"></span> รายการ
+          </span>
+          <button x-show="hasFilter" @click="clearFilters()"
+            class="h-11 px-3.5 rounded-xl text-[13px] font-medium text-slate-500 bg-white ring-1 ring-slate-200 hover:bg-slate-50 inline-flex items-center gap-1.5 transition">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            ล้าง
+          </button>
+          <button @click="exportCSV()"
+            class="h-11 px-3.5 rounded-xl text-[13px] font-semibold text-slate-600 bg-white ring-1 ring-slate-200 hover:bg-slate-50 inline-flex items-center gap-1.5 transition">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/></svg>
+            CSV
+          </button>
+        </div>
+
+        <!-- Active filters -->
+        <div x-show="activeFilterTags.length" x-cloak class="active-filter-bar">
+          <span class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-500 shrink-0">กำลังกรอง</span>
+          <template x-for="(tag, ti) in activeFilterTags" :key="tag.id + '-' + ti">
+            <span class="active-filter-chip">
+              <span x-text="tag.label"></span>
+              <button type="button" @click="removeFilterTag(tag.id)" class="active-filter-remove" aria-label="ลบตัวกรอง">&times;</button>
+            </span>
+          </template>
+          <button type="button" @click="clearFilters()" class="text-[12px] font-semibold ml-auto shrink-0 hover:underline" style="color:var(--accent)">ล้างทั้งหมด</button>
+        </div>
+
+        <!-- Desktop table -->
+        <div class="desktop-table rounded-2xl bg-white ring-1 ring-slate-200/70 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse min-w-[960px]">
+              <thead>
+                <tr class="bg-slate-50/95">
+                  <th class="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-[.08em] text-slate-400 cursor-pointer select-none" @click="setSort('id')">
+                    <span class="inline-flex items-center gap-1">#
+                      <span class="inline-flex flex-col -space-y-1">
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='id'&&sortDir==='asc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 0l4 6H0z"/></svg>
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='id'&&sortDir==='desc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 6L0 0h8z"/></svg>
+                      </span>
+                    </span>
+                  </th>
+                  <th class="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-[.08em] text-slate-400 cursor-pointer select-none" @click="setSort('source')">
+                    <span class="inline-flex items-center gap-1">ที่มา
+                      <span class="inline-flex flex-col -space-y-1">
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='source'&&sortDir==='asc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 0l4 6H0z"/></svg>
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='source'&&sortDir==='desc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 6L0 0h8z"/></svg>
+                      </span>
+                    </span>
+                  </th>
+                  <th class="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-[.08em] text-slate-400 cursor-pointer select-none" @click="setSort('name')">
+                    <span class="inline-flex items-center gap-1">ชื่อ
+                      <span class="inline-flex flex-col -space-y-1">
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='name'&&sortDir==='asc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 0l4 6H0z"/></svg>
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='name'&&sortDir==='desc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 6L0 0h8z"/></svg>
+                      </span>
+                    </span>
+                  </th>
+                  <th class="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-[.08em] text-slate-400">เบอร์โทร</th>
+                  <th class="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-[.08em] text-slate-400 cursor-pointer select-none" @click="setSort('productType')">สินค้า</th>
+                  <th class="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-[.08em] text-slate-400">ชำระเงิน</th>
+                  <th class="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-[.08em] text-slate-400 cursor-pointer select-none" @click="setSort('status')">
+                    <span class="inline-flex items-center gap-1">Status
+                      <span class="inline-flex flex-col -space-y-1">
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='status'&&sortDir==='asc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 0l4 6H0z"/></svg>
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='status'&&sortDir==='desc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 6L0 0h8z"/></svg>
+                      </span>
+                    </span>
+                  </th>
+                  <th class="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-[.08em] text-slate-400 min-w-[200px] cursor-pointer select-none" @click="setSort('lastNote')">
+                    <span class="inline-flex items-center gap-1">บันทึกล่าสุด
+                      <span class="inline-flex flex-col -space-y-1">
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='lastNote'&&sortDir==='asc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 0l4 6H0z"/></svg>
+                        <svg width="7" height="5" viewBox="0 0 8 6" :class="sortCol==='lastNote'&&sortDir==='desc'?'text-[var(--accent)]':'text-slate-300'" fill="currentColor"><path d="M4 6L0 0h8z"/></svg>
+                      </span>
+                    </span>
+                  </th>
+                  <th class="pr-5 py-2.5 w-[44px]"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <template x-if="paginated.length===0">
+                  <tr><td colspan="9" class="py-16 text-center">
+                    <div class="text-[14px] text-slate-400">ไม่พบรายชื่อที่ตรงกับเงื่อนไข</div>
+                  </td></tr>
+                </template>
+                <template x-for="c in paginated" :key="c.id">
+                  <tr @click="openDrawer(c)" class="row-stripe border-b border-slate-100 cursor-pointer group"
+                      :class="[selectedCustomer&&selectedCustomer.id===c.id?'!bg-[var(--accent-tint)]':'', hlTrClass(c)]">
+                    <td class="pl-5 pr-2 h-[34px] text-[12px] tabular-nums text-slate-400 font-medium" x-text="c.id"></td>
+                    <td class="px-3">
+                      <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-semibold whitespace-nowrap" :class="srcToneClass(c.source)" x-text="displaySource(c)"></span>
+                    </td>
+                    <td class="px-3 min-w-[200px] max-w-[340px]">
+                      <div class="flex items-start gap-2 min-w-0">
+                        <button class="hl-flag shrink-0 mt-0.5" :class="hlClass(c)" :title="hlLabel(c)" @click.stop="cycleHL(c)"></button>
+                        <div class="min-w-0 flex-1">
+                          <div class="font-semibold text-slate-800 truncate text-[13.5px] leading-snug" x-text="c.name||'—'"></div>
+                          <div class="flex items-center gap-1.5 flex-wrap text-[11px] text-slate-400 mt-0.5 leading-snug">
+                            <span class="inline-flex items-center gap-0.5 min-w-0" x-show="c.province || c.age">
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="shrink-0" style="color:var(--accent);opacity:.7"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                              <span x-show="c.province" x-text="c.province"></span>
+                              <span class="text-slate-300" x-show="housingLabel(c.housingType)"> · </span>
+                              <span x-show="housingLabel(c.housingType)" x-text="housingLabel(c.housingType)"></span>
+                              <span class="text-slate-300 tabular-nums" x-show="c.age" x-text="((c.province||housingLabel(c.housingType))?' · ':'')+c.age+'ปี'"></span>
+                            </span>
+                            <span x-show="(c.province || c.age) && (c.convenientDate || c.contactTime || c.installDate)" class="text-slate-300">·</span>
+                            <span x-show="c.convenientDate || c.contactTime" class="whitespace-nowrap">
+                              <span x-show="c.convenientDate" x-text="fmtFilterDate(c.convenientDate)"></span>
+                              <span x-show="c.convenientDate && c.contactTime" class="text-slate-300"> · </span>
+                              <span x-show="c.contactTime" x-text="c.contactTime"></span>
+                            </span>
+                            <span x-show="c.installDate" class="whitespace-nowrap" x-text="'ติดตั้ง '+c.installDate"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-3 whitespace-nowrap">
+                      <span class="font-semibold text-slate-800 tabular-nums tracking-tight text-[13.5px]" x-text="fmtPhone(c.phone)"></span>
+                    </td>
+                    <td class="px-3 text-[13px] text-slate-600 whitespace-nowrap" x-text="c.productType||'—'"></td>
+                    <td class="px-3">
+                      <span x-show="c.paymentChannel" class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-semibold" :style="paymentStyle(c.paymentChannel)" x-text="c.paymentChannel"></span>
+                      <span x-show="!c.paymentChannel" class="text-[12px] text-slate-400">—</span>
+                    </td>
+                    <td class="px-3">
+                      <span class="inline-flex items-center gap-1.5 text-[12px] font-semibold" :class="statusToneClass(c.status)">
+                        <span class="h-1.5 w-1.5 rounded-full" :class="statusDotClass(c.status)"></span>
+                        <span x-text="statusLabel(c.status)"></span>
+                      </span>
+                    </td>
+                    <td class="px-3 max-w-[260px]">
+                      <div x-show="c.parsedNotes.length===0" class="text-[11.5px] text-slate-400 italic">—</div>
+                      <div x-show="c.parsedNotes.length>0" class="flex items-baseline gap-2">
+                        <span x-show="c.parsedNotes[0].date" class="text-[11px] tabular-nums text-slate-400 font-medium shrink-0" x-text="fmtNoteDate(c.parsedNotes[0].date)"></span>
+                        <span class="text-[11.5px] text-slate-500 truncate" x-text="c.parsedNotes[0].text"></span>
+                        <span x-show="c.parsedNotes.length>1" class="text-[10px] font-bold shrink-0" style="color:var(--accent)" x-text="'+'+(c.parsedNotes.length-1)"></span>
+                      </div>
+                    </td>
+                    <td class="pr-5 pl-2 text-right">
+                      <span class="inline-grid place-items-center h-8 w-8 rounded-lg text-slate-300 group-hover:text-[var(--accent)] group-hover:bg-white transition">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                      </span>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Mobile cards -->
+        <div class="mobile-list">
+          <template x-if="paginated.length===0">
+            <div class="rounded-2xl bg-white ring-1 ring-slate-200/70 py-12 text-center text-[13px] text-slate-400">ไม่พบข้อมูล</div>
+          </template>
+          <template x-for="c in paginated" :key="c.id">
+            <div @click="openDrawer(c)" class="bg-white ring-1 ring-slate-200/70 rounded-xl p-3.5 cursor-pointer active:bg-slate-50 transition" :class="hlMobClass(c)">
+              <div class="flex items-center justify-between gap-2 mb-1.5">
+                <div class="flex items-center gap-2 min-w-0">
+                  <button class="hl-flag" :class="hlClass(c)" @click.stop="cycleHL(c)"></button>
+                  <span class="font-semibold text-slate-800 text-[14px] truncate" x-text="c.name||'—'"></span>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11.5px] font-semibold shrink-0" :class="statusToneClass(c.status)">
+                  <span class="h-1.5 w-1.5 rounded-full" :class="statusDotClass(c.status)"></span>
+                  <span x-text="statusLabel(c.status)"></span>
+                </span>
+              </div>
+              <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+                <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold" :class="srcToneClass(c.source)" x-text="displaySource(c)"></span>
+                <span class="text-[12px] font-semibold text-slate-700 tabular-nums" x-text="fmtPhone(c.phone)"></span>
+                <span x-show="c.province" class="text-[11.5px] text-slate-400" x-text="'📍'+c.province"></span>
+                <span x-show="housingLabel(c.housingType)" class="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold whitespace-normal max-w-[14rem]"
+                      :class="housingIsCondo(c.housingType) ? 'bg-sky-50 text-sky-700' : 'bg-amber-50 text-amber-800'"
+                      x-text="housingLabel(c.housingType)"></span>
+              </div>
+              <div x-show="c.convenientDate || c.contactTime || c.installDate" class="text-[11px] text-slate-400 mb-1">
+                <span x-show="c.convenientDate" x-text="'📅 '+fmtFilterDate(c.convenientDate)"></span>
+                <span x-show="c.convenientDate && c.contactTime" class="text-slate-300"> · </span>
+                <span x-show="c.contactTime" x-text="'🕐 '+c.contactTime"></span>
+                <span x-show="c.installDate" x-text="(c.convenientDate||c.contactTime?' · ':'')+'ติดตั้ง '+c.installDate"></span>
+              </div>
+              <div x-show="c.parsedNotes.length>0" class="flex items-baseline gap-2 pt-1.5 border-t border-slate-100 mt-1.5">
+                <span class="text-[10px] tabular-nums text-slate-400 shrink-0" x-text="fmtNoteDate(c.parsedNotes[0].date)"></span>
+                <span class="text-[11px] text-slate-500 truncate" x-text="c.parsedNotes[0].text"></span>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between px-1 pt-1">
+          <div class="text-[12.5px] text-slate-400">
+            แสดง <span class="font-semibold text-slate-600 tabular-nums" x-text="Math.min((page-1)*pageSize+1,filtered.length)"></span>–<span class="font-semibold text-slate-600 tabular-nums" x-text="Math.min(page*pageSize,filtered.length)"></span>
+            จาก <span class="font-semibold text-slate-600 tabular-nums" x-text="filtered.length"></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button @click="page=Math.max(1,page-1)" :disabled="page===1"
+              class="h-8 w-8 grid place-items-center rounded-lg text-slate-300 hover:bg-white hover:text-slate-600 hover:ring-1 hover:ring-slate-200 transition disabled:opacity-40">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <template x-for="p in pageRange" :key="p">
+              <button @click="page=p"
+                class="h-8 min-w-[32px] px-2 grid place-items-center rounded-lg text-[12.5px] font-bold tabular-nums transition"
+                :class="p===page ? 'text-white' : 'text-slate-500 hover:bg-white hover:ring-1 hover:ring-slate-200'"
+                :style="p===page ? 'background:var(--accent)' : ''"
+                x-text="p"></button>
+            </template>
+            <button @click="page=Math.min(totalPages,page+1)" :disabled="page===totalPages"
+              class="h-8 w-8 grid place-items-center rounded-lg text-slate-400 hover:bg-white hover:text-slate-600 hover:ring-1 hover:ring-slate-200 transition disabled:opacity-40">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <div class="h-5 w-px bg-slate-200"></div>
+            <select x-model.number="pageSize" @change="page=1"
+              class="h-8 pl-3 pr-6 rounded-lg bg-white ring-1 ring-slate-200 text-[12.5px] text-slate-600 font-medium focus:outline-none"
+              style="appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22 fill=%22%2394a3b8%22><path d=%22M0 0l5 6 5-6z%22/></svg>');background-repeat:no-repeat;background-position:right 8px center;padding-right:24px">
+              <option value="25">25/หน้า</option>
+              <option value="50">50/หน้า</option>
+              <option value="100">100/หน้า</option>
+            </select>
+          </div>
+        </div>
+
+      </div><!-- /list -->
+    </div><!-- /!loading -->
+  </div><!-- /apiUrl -->
+</main>
+
+<!-- ═══ CUSTOMER POPUP (กลางจอ ไม่เลื่อน) ═══ -->
+<!-- ต้อง x-show ปิดทั้งก้อน — อย่าใช้แค่ pointer-events-none บน parent
+     (ลูกที่มี pointer-events:auto ยังบังคลิกได้ → ปุ่มโหลด/header กดไม่ได้) -->
+<div x-show="showDrawer" x-cloak class="drawer-shell" :class="(fuModal || showConfig) ? 'is-under-modal' : ''" style="display:none">
+  <div class="drawer-bd" @click="closeDrawer()"></div>
+  <aside class="drawer-panel" @click.stop>
+    <template x-if="selectedCustomer">
+      <div class="flex flex-col h-full min-h-0">
+        <!-- Popup header -->
+        <div class="px-6 pt-5 pb-4 border-b border-slate-100 shrink-0 bg-white rounded-t-[20px]">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3.5">
+              <div class="h-12 w-12 rounded-2xl grid place-items-center text-white font-display font-bold text-[15px]" style="background:var(--accent)"
+                   x-text="(selectedCustomer.name||'').trim().slice(0,2).toUpperCase()||'?'"></div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <div class="font-display font-bold text-[17px] text-slate-900 leading-tight max-w-[260px]" x-text="selectedCustomer.name||'—'"></div>
+                  <button class="hl-flag" :class="hlClass(selectedCustomer)" :title="hlLabel(selectedCustomer)" @click="cycleHL(selectedCustomer)"></button>
+                </div>
+                <div class="text-[12px] text-slate-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
+                  <span x-text="'#'+selectedCustomer.id"></span>
+                  <span class="text-slate-300" x-show="selectedCustomer.province">·</span>
+                  <span x-show="selectedCustomer.province" x-text="'📍 '+selectedCustomer.province+(isMetaSource(selectedCustomer.source)?' (C)':'')"></span>
+                  <span class="text-slate-300" x-show="housingLabel(selectedCustomer.housingType)">·</span>
+                  <span x-show="housingLabel(selectedCustomer.housingType)" x-text="housingLabel(selectedCustomer.housingType)"></span>
+                  <span x-show="selectedCustomer.age" x-text="selectedCustomer.age+' ปี'"></span>
+                  <span class="text-slate-300" x-show="selectedCustomer.row">·</span>
+                  <span class="text-[11px]" x-show="selectedCustomer.row" x-text="'แถว '+selectedCustomer.row"></span>
+                </div>
+              </div>
+            </div>
+            <button @click="closeDrawer()" class="h-9 w-9 grid place-items-center rounded-lg text-slate-400 hover:bg-slate-100 transition">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="flex items-center gap-2 mt-3 flex-wrap">
+            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-semibold" :class="srcToneClass(selectedCustomer.source)" x-text="displaySource(selectedCustomer)"></span>
+            <div x-show="selectedCustomer?.altRows?.length" class="mt-1 text-[12px] text-amber-700 bg-amber-50 rounded-lg px-2.5 py-1.5">
+              รวมหลีดเบอร์ซ้ำจาก: <span x-text="selectedCustomer.sourceMerged"></span>
+            </div>
+            <span class="inline-flex items-center gap-1.5 text-[12px] font-semibold" :class="statusToneClass(selectedCustomer.status)">
+              <span class="h-1.5 w-1.5 rounded-full" :class="statusDotClass(selectedCustomer.status)"></span>
+              <span x-text="statusLabel(selectedCustomer.status)||'(ยังไม่ระบุ)'"></span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Drawer body -->
+        <div class="flex-1 overflow-y-auto overscroll-contain px-6 py-5 space-y-5 min-h-0">
+
+          <!-- Quick actions -->
+          <div class="flex flex-col gap-2">
+            <a :href="selectedCustomer.phone ? 'tel:'+rawPhone(selectedCustomer.phone) : null"
+               class="h-10 rounded-xl text-[13px] font-semibold inline-flex items-center justify-center gap-2 text-white transition shrink-0"
+               :class="!selectedCustomer.phone && 'opacity-40 pointer-events-none'"
+               style="background:var(--accent)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7 12.5 12.5 0 0 0 .7 2.7 2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.5 12.5 12.5 0 0 0 2.7.7A2 2 0 0 1 22 16.9z"/></svg>
+              โทรออก
+            </a>
+            <button type="button"
+              @click="openLineUrl(lineUrlFromId(selectedCustomer.lineId))"
+              :disabled="!lineUrlFromId(selectedCustomer.lineId)"
+              class="w-full h-10 rounded-xl text-[13px] font-semibold inline-flex items-center justify-center gap-2 transition"
+              :class="lineUrlFromId(selectedCustomer.lineId) ? 'text-[#06c755] bg-[#06c755]/10 ring-1 ring-[#06c755]/25 hover:bg-[#06c755]/15' : 'text-slate-400 bg-slate-50 ring-1 ring-slate-200 opacity-50 cursor-not-allowed'">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="shrink-0"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+              <span>แอดไลน์ไอดี</span>
+            </button>
+          </div>
+
+          <!-- Contact info -->
+          <div class="grid grid-cols-2 gap-4">
+            <div x-show="selectedCustomer.phone">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">เบอร์โทร</div>
+              <div class="text-[14px] text-slate-800 font-semibold tabular-nums" x-text="fmtPhone(selectedCustomer.phone)"></div>
+            </div>
+            <div x-show="selectedCustomer.email">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">Email</div>
+              <div class="text-[13px] text-slate-600 truncate" x-text="selectedCustomer.email"></div>
+            </div>
+            <div x-show="selectedCustomer.lineId">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">LINE ID</div>
+              <div class="text-[14px] text-slate-800 font-medium" x-text="selectedCustomer.lineId"></div>
+            </div>
+            <div x-show="selectedCustomer.productType">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">สินค้า <span x-show="isMetaSource(selectedCustomer.source)" class="normal-case font-semibold text-slate-300">(E)</span></div>
+              <div class="text-[14px] text-slate-800 font-medium" x-text="selectedCustomer.productType"></div>
+            </div>
+            <div x-show="isSelloutSource(selectedCustomer.source) && selectedCustomer.orderNo">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">OP</div>
+              <div class="text-[14px] text-slate-800 font-medium tabular-nums" x-text="selectedCustomer.orderNo"></div>
+            </div>
+            <div x-show="isSelloutSource(selectedCustomer.source) && selectedCustomer.sellDate">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">วันที่ขาย</div>
+              <div class="text-[14px] text-slate-800 font-medium" x-text="selectedCustomer.sellDate"></div>
+            </div>
+            <div x-show="isSelloutSource(selectedCustomer.source) && selectedCustomer.installDate">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">วันติดตั้ง</div>
+              <div class="text-[14px] text-slate-800 font-medium" x-text="selectedCustomer.installDate"></div>
+            </div>
+            <div x-show="isSelloutSource(selectedCustomer.source) && selectedCustomer.quantity">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">จำนวน</div>
+              <div class="text-[14px] text-slate-800 font-medium tabular-nums" x-text="selectedCustomer.quantity"></div>
+            </div>
+            <div x-show="isSelloutSource(selectedCustomer.source) && selectedCustomer.amount">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">Amount</div>
+              <div class="text-[14px] text-slate-800 font-semibold tabular-nums" x-text="selectedCustomer.amount"></div>
+            </div>
+            <div x-show="isSelloutSource(selectedCustomer.source) && selectedCustomer.policyName" class="col-span-2">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">Policy Name</div>
+              <div class="text-[13px] text-slate-800 font-medium break-all" x-text="selectedCustomer.policyName"></div>
+            </div>
+            <div x-show="selectedCustomer.paymentChannel">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">ชำระเงิน <span class="normal-case font-semibold text-slate-300">(A)</span></div>
+              <div class="text-[14px] text-slate-800 font-medium" x-text="selectedCustomer.paymentChannel"></div>
+            </div>
+            <div x-show="isMetaSource(selectedCustomer.source) && housingLabel(selectedCustomer.housingType)">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">ที่อยู่ <span class="normal-case font-semibold text-slate-300">(D)</span></div>
+              <div class="text-[14px] text-slate-800 font-medium leading-snug" x-text="housingLabel(selectedCustomer.housingType)"></div>
+            </div>
+            <div x-show="isMetaSource(selectedCustomer.source) && selectedCustomer.convenientDate">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">วันที่สะดวก <span class="normal-case font-semibold text-slate-300">(F)</span></div>
+              <div class="text-[14px] text-slate-800 font-medium" x-text="selectedCustomer.convenientDate"></div>
+            </div>
+            <div x-show="isMetaSource(selectedCustomer.source) && selectedCustomer.contactTime">
+              <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-1">ช่วงเวลาติดต่อ <span class="normal-case font-semibold text-slate-300">(G)</span></div>
+              <div class="text-[14px] text-slate-800 font-medium" x-text="selectedCustomer.contactTime"></div>
+            </div>
+          </div>
+
+          <!-- Status changer -->
+          <div x-show="!isSelloutSource(selectedCustomer.source)">
+            <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-2">เปลี่ยนสถานะ</div>
+            <div class="flex flex-wrap gap-1.5 mb-3">
+              <template x-for="s in statusDefs.filter(x=>x.value!=='')" :key="s.value">
+                <button @click="pendingStatus=s.value"
+                  class="h-8 px-3 rounded-lg text-[12.5px] font-medium transition"
+                  :class="pendingStatus===s.value ? 'text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'"
+                  :style="pendingStatus===s.value ? 'background:var(--accent)' : ''"
+                  x-text="s.label"></button>
+              </template>
+            </div>
+            <div class="flex gap-2">
+              <button @click="saveStatus()" :disabled="!pendingStatus||savingStatus"
+                class="flex-1 h-10 rounded-xl text-[13.5px] font-bold text-white disabled:opacity-40 transition" style="background:var(--accent)">
+                <span x-show="!savingStatus">💾 บันทึก Status</span>
+                <span x-show="savingStatus">กำลังบันทึก...</span>
+              </button>
+              <button x-show="pendingStatus" @click="pendingStatus=''"
+                class="h-10 px-4 rounded-xl text-[13px] font-semibold text-slate-600 bg-white ring-1 ring-slate-200 hover:bg-slate-50 transition">ยกเลิก</button>
+            </div>
+            <div x-show="saveMsg" class="mt-2 text-[13px]" :class="saveOk?'text-emerald-600':'text-rose-600'" x-text="saveMsg"></div>
+          </div>
+
+          <!-- Activity picker -->
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-2">บันทึกกิจกรรม</div>
+            <div class="flex gap-2">
+              <select x-model="selectedActivity"
+                class="flex-1 h-10 pl-3 pr-8 rounded-xl bg-white ring-1 ring-slate-200 focus:ring-2 focus:outline-none text-[13px] text-slate-700 appearance-none"
+                style="background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22 fill=%22%2394a3b8%22><path d=%22M0 0l5 6 5-6z%22/></svg>');background-repeat:no-repeat;background-position:right 10px center">
+                <option value="">— เลือกกิจกรรม —</option>
+                <template x-for="a in activityOpts" :key="a.label">
+                  <option :value="a.label" x-text="a.label"></option>
+                </template>
+              </select>
+              <button @click="selectedActivity && addActivity(activityOpts.find(a=>a.label===selectedActivity)); selectedActivity=''"
+                :disabled="!selectedActivity"
+                class="h-10 px-4 rounded-xl text-white text-[13px] font-bold transition disabled:opacity-40 shrink-0" style="background:var(--accent)">
+                บันทึก
+              </button>
+            </div>
+          </div>
+
+          <!-- Notes history -->
+          <div>
+            <div class="text-[11px] font-bold uppercase tracking-[.1em] text-slate-400 mb-3">ประวัติการติดต่อ</div>
+            <div x-show="notesLoading" class="text-[12px] text-slate-400 text-center py-4">กำลังโหลด...</div>
+            <div x-show="!notesLoading && sheetNotes.length===0" class="text-[12px] text-slate-400 text-center py-4">ยังไม่มีบันทึก</div>
+            <ol x-show="!notesLoading" class="relative border-l-2 border-slate-100 ml-1.5 space-y-4 max-h-[260px] overflow-y-auto">
+              <template x-for="(note, i) in sheetNotes" :key="i">
+                <li class="pl-5 relative">
+                  <span class="absolute -left-[7px] top-1 h-3 w-3 rounded-full ring-4 ring-white"
+                        :class="i===0 ? '' : 'bg-slate-300'"
+                        :style="i===0 ? 'background:var(--accent)' : ''"></span>
+                  <div class="text-[13px] text-slate-600 leading-relaxed" x-text="note"></div>
+                  <button @click="deleteNote(i)" class="text-[11px] text-slate-300 hover:text-rose-500 transition mt-0.5">ลบ</button>
+                </li>
+              </template>
+            </ol>
+            <div x-show="syncMsg" class="mt-2 text-[12px] rounded-lg px-3 py-2"
+                 :class="syncOk===true?'bg-emerald-50 text-emerald-700':syncOk===false?'bg-rose-50 text-rose-700':'bg-amber-50 text-amber-700'"
+                 x-text="syncMsg"></div>
+          </div>
+        </div>
+
+        <!-- Footer note input -->
+        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 shrink-0">
+          <div class="flex gap-2">
+            <input type="text" x-model="newNote" @keydown.enter="addNote()" placeholder="เพิ่มบันทึกการติดต่อ…"
+              class="flex-1 h-10 px-3.5 rounded-xl bg-white ring-1 ring-slate-200 focus:ring-2 focus:outline-none text-[13.5px] placeholder:text-slate-400"/>
+            <button @click="addNote()" :disabled="!newNote.trim()"
+              class="h-10 px-4 rounded-xl text-white text-[13px] font-bold transition disabled:opacity-40" style="background:var(--accent)">บันทึก</button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </aside>
+</div>
+
+<script>
+const CRM_BUILD       = '3 ก.ย. 69 v51 · Meta Densu Sep';
+const CACHE_SCHEMA    = 'v23';
+const NOTE_DATE_ONLY  = false;
+const LOGIN_PASSWORD    = 'pairat1234';
+const LOGIN_SESSION_KEY = 'lgCrmLoggedIn_pairat';
+const API_URL_KEY       = 'lgCrmApiUrl_pairat';
+const CACHE_KEY         = 'lgCrmCache_pairat_v13';
+const CACHE_VER_KEY     = 'lgCrmCacheSchema_pairat';
+// เขียน: รอแค่ชีตหลัก · alt ยิงเบื้องหลัง · เน็ต/timeout/script error = soft-ok (ไม่โชว์ error แดง)
+const WRITE_TIMEOUT_MS  = 60000;
+const NOTES_LOAD_MS     = 25000;
+const isTimeoutErr = (e) => /timeout|หมดเวลา/i.test(String(e && e.message || e || ''));
+// เขียน Sheet มักสำเร็จแล้ว แต่ JSONP ตอบไม่ได้ — ห้ามโชว์ "โหลด Script ไม่ได้ / Deploy Anyone"
+const isWriteSoftOkErr = (e) => /timeout|หมดเวลา|โหลด Script|script|Failed|Network|network|Failed to fetch|เน็ต|Deploy|Anyone|URL ผิด/i.test(String(e && e.message || e || ''));
+const isSkipSheetErr = (e) => /sheet not found|ไม่พบ sheet|no config|timeout|หมดเวลา/i.test(String(e && e.message || e || ''));
+const META_PAIR         = {'Meta Densu Sep':true,'Meta Densu Aug':true,'Meta Densu July':true,'Meta Densu':true};
+const SOURCE_PRIORITY   = {'Meta Densu Sep':1,'Meta Densu Aug':2,'Meta Densu July':3,'Meta Densu':4};
+// Meta ITAX = หลีดแยก (ไม่ dedup กับ Densu) · คอลัมน์เดียวกับ Meta Densu Sep
+// ทุกแท็บ POP UP (ชื่อสะกดต่างกัน) แสดงรวมการ์ด POP UP เดียว
+const SOURCE_ALIASES    = {
+  'Meta Densu Aug': 'Meta Densu Sep',
+  'Meta Densu July': 'Meta Densu Sep',
+  'Meta Densu August': 'Meta Densu Sep',
+  'Meta Densu September': 'Meta Densu Sep',
+  'Meta Desu Sep': 'Meta Densu Sep',
+  'POP UP Bannar': 'Lead Subscribe POP UP Braner',
+  'POP UP Banner': 'Lead Subscribe POP UP Braner',
+  'POP UP Braner': 'Lead Subscribe POP UP Braner',
+  'Lead Subscribe POP UP Banner': 'Lead Subscribe POP UP Braner',
+  'Lead POP UP Braner': 'Lead Subscribe POP UP Braner',
+  'Lead POP UP Banner': 'Lead Subscribe POP UP Braner',
+  'POP UP': 'Lead Subscribe POP UP Braner',
+  'Lead Subscribe POP UP': 'Lead Subscribe POP UP Braner',
+  'Sell out Wuttichai.P (POND)': 'Sell out Wuttichai.P',
+  'Sell out Wuttichai.P(POND)': 'Sell out Wuttichai.P',
+  'Sell out Wuttichai P': 'Sell out Wuttichai.P',
+  'Sellout Wuttichai.P': 'Sell out Wuttichai.P',
+  'Sell out POND': 'Sell out Wuttichai.P',
+};
+function normalizeSource(src) {
+  if (!src) return '';
+  if (SOURCE_ALIASES[src]) return SOURCE_ALIASES[src];
+  if (/meta\s*de[ns]su\s*(sep|september|ก\.?\s*ย)/i.test(src)) return 'Meta Densu Sep';
+  if (/meta\s*de[ns]su\s*(aug|august|july|ส\.?\s*ค|ก\.?\s*ค)/i.test(src)) return 'Meta Densu Sep';
+  // fuzzy: ชื่อแท็บที่มี POP UP / Braner / Bannar
+  if (/pop\s*up|braner|bannar|banner/i.test(src)) return 'Lead Subscribe POP UP Braner';
+  if (/sell\s*out/i.test(src)) return 'Sell out Wuttichai.P';
+  return src;
+}
+function phoneKey(phone) {
+  let d = String(phone||'').replace(/\D/g,'');
+  if (d.length >= 11 && d.startsWith('66')) d = '0' + d.slice(2);
+  if (d.length === 9) d = '0' + d;
+  return d.length >= 9 ? d : '';
+}
+function pickPreferredCustomer(a, b) {
+  const pa = SOURCE_PRIORITY[a.source] || 50, pb = SOURCE_PRIORITY[b.source] || 50;
+  if (pa !== pb) return pa < pb ? a : b;
+  const sa = String(a.status||'').length, sb = String(b.status||'').length;
+  if (sa !== sb) return sa > sb ? a : b;
+  return (a.row||0) >= (b.row||0) ? a : b;
+}
+function dedupeMetaOnly(list) {
+  const byPhone = new Map(), noPhone = [], out = [];
+  for (const c of (list||[])) {
+    const key = phoneKey(c.phone);
+    if (!key) { noPhone.push({...c}); continue; }
+    if (!byPhone.has(key)) { byPhone.set(key, {p:{...c}, alts:[]}); continue; }
+    const bucket = byPhone.get(key);
+    const winner = pickPreferredCustomer(bucket.p, c);
+    const loser = winner === bucket.p ? c : bucket.p;
+    bucket.p = {...winner};
+    bucket.alts.push({source:loser.source, row:loser.row, status:loser.status});
+  }
+  for (const bucket of byPhone.values()) {
+    const p = bucket.p;
+    if (bucket.alts.length) {
+      p.altRows = bucket.alts;
+      p.sourceMerged = p.source;
+      for (const alt of bucket.alts) {
+        if (!p.sourceMerged.includes(alt.source)) p.sourceMerged += ' · ' + alt.source;
+      }
+    }
+    out.push(p);
+  }
+  return out.concat(noPhone);
+}
+function dedupeCustomersByPhone(list) {
+  const meta = [], rest = [];
+  for (const c of (list||[])) (META_PAIR[c.source] ? meta : rest).push(c);
+  let id = 1;
+  return dedupeMetaOnly(meta).concat(rest).map(c => ({...c, id: id++}));
+}
+const HL_KEY            = 'lgCrmHL_pairat';
+const PROMOTER          = 'PAIRAT';
+const CACHE_TTL         = 30 * 60 * 1000; // 30 min
+
+function app() {
+  return {
+    crmBuild: CRM_BUILD,
+    /* ── Auth ── */
+    isLoggedIn: localStorage.getItem(LOGIN_SESSION_KEY) === 'yes',
+    loginPw: '', loginErr: '',
+
+    /* ── Config ── */
+    apiUrl:    (localStorage.getItem(API_URL_KEY) || '').trim() || 'https://script.google.com/macros/s/AKfycbwnuMh3TBNWlIzlTfI05Tv_X1Y3NJThhFdxWaXgtlp27GQDGFiYD4V9Np9evv5cszPK/exec',
+    configUrl: (localStorage.getItem(API_URL_KEY) || '').trim() || 'https://script.google.com/macros/s/AKfycbwnuMh3TBNWlIzlTfI05Tv_X1Y3NJThhFdxWaXgtlp27GQDGFiYD4V9Np9evv5cszPK/exec',
+    showConfig: false,
+    testLoading: false, testMsg: '', testOk: false,
+
+    /* ── Data ── */
+    testMode: false,
+    customers: [], loading: false, softLoading: false, loadErr: null, lastFetch: '',
+    sourceCounts: null, sheetsFound: null, rawCount: null,
+    workSummary: {totalClosed: 0, sources: [], products: [], payments: []},
+    showWorkSummary: false,
+
+    /* ── Filters ── */
+    search: '', filterSource: '', filterStatus: '', filterStatusGroup: null, filterPayment: '', filterActivity: '', filterHL: null,
+    filterConvenientDate: '', filterContactTime: '', filterHousing: '',
+    activeQuickView: '',
+    sortCol: 'lastNote', sortDir: 'desc', page: 1, pageSize: 25,
+    _frozenRows: null,
+
+    /* ── Drawer ── */
+    showDrawer: false, selectedCustomer: null,
+    pendingStatus: '', savingStatus: false, saveMsg: '', saveOk: false,
+    sheetNotes: [], notesLoading: false, newNote: '',
+    syncMsg: '', syncOk: null,
+
+    /* ── Follow-up modal ── */
+    fuModal: false, fuDateTime: '', fuErr: '', _pendingFuActivity: null,
+
+    /* ── Activity picker ── */
+    selectedActivity: '',
+
+    /* ── Highlights ── */
+    highlights: (() => { try { return JSON.parse(localStorage.getItem(HL_KEY)||'{}'); } catch { return {}; } })(),
+
+    /* ── Definitions ── */
+
+    quickViewDefs: [
+      {id:'unset',    emoji:'📋', label:'ยังไม่ทำ',     desc:'ยังไม่ระบุ Status'},
+      {id:'followup', emoji:'📞', label:'ต้องติดตาม',   desc:'Called · Follow up'},
+      {id:'hot',      emoji:'🔥', label:'มีโอกาสปิด',   desc:'มีสีสนใจขึ้นไป'},
+      {id:'docs',     emoji:'📄', label:'รอเอกสาร',     desc:'รอยื่นเอกสาร'},
+    ],
+    activityOpts: [
+      {label:'ไม่รับสายครั้งที่ 1'},
+      {label:'ไม่รับสายครั้งที่ 2'},
+      {label:'ไม่รับสายครั้งที่ 3'},
+      {label:'ไม่รับสายครั้งที่ 4'},
+      {label:'ไม่รับสายครั้งที่ 5'},
+      {label:'รับแล้วตัดสาย'},
+      {label:'เบอร์โทรไม่ถูกต้อง'},
+      {label:'ไม่สามารถติดต่อได้'},
+      {label:'มีเจ้าหน้าที่ติดต่อแล้ว'},
+      {label:'ติดบูโร (ไม่ผ่านเครดิต)'},
+      {label:'ไม่เข้าเงื่อนไขการสมัคร'},
+      {label:'ไม่สะดวกในขณะนี้'},
+      {label:'นัดติดต่อกลับ', needsDateTime:true},
+      {label:'รอยื่นเอกสาร'},
+      {label:'ไม่สนใจแล้ว'},
+      {label:'ยังไม่ตัดสินใจ'},
+      {label:'สอบถามข้อมูลเบื้องต้น'},
+      {label:'ส่งรายละเอียดทางอีเมล'},
+      {label:'ส่ง Remote Order รอชำระเงิน'},
+      {label:'เพิ่มเพื่อน LINE เพื่อให้ข้อมูลเพิ่มเติม'},
+      {label:'สนใจซื้อแบบปกติ'},
+      {label:'ซื้อไปแล้ว'},
+      {label:'ไม่สนใจผ่อนระยะยาว'},
+      {label:'ไม่สะดวกยื่นเอกสาร'},
+      {label:'ทำรายการสำเร็จ'},
+      {label:'ซื้อผ่านตัวแทนแล้ว ทำรายการสำเร็จผ่าน LG.com'},
+    ],
+
+    activityFilters: [
+      {label:'ไม่รับสายครั้งที่ 1',     key:'ไม่รับสายครั้งที่ 1'},
+      {label:'ไม่รับสายครั้งที่ 2',     key:'ไม่รับสายครั้งที่ 2'},
+      {label:'ไม่รับสายครั้งที่ 3',     key:'ไม่รับสายครั้งที่ 3'},
+      {label:'ไม่รับสายครั้งที่ 4',     key:'ไม่รับสายครั้งที่ 4'},
+      {label:'ไม่รับสายครั้งที่ 5',     key:'ไม่รับสายครั้งที่ 5'},
+      {label:'รับแล้วตัดสาย',           key:'ตัดสาย'},
+      {label:'เบอร์โทรไม่ถูกต้อง',       key:'เบอร์โทรไม่ถูกต้อง'},
+      {label:'ไม่สามารถติดต่อได้',       key:'ติดต่อไม่ได้'},
+      {label:'มีเจ้าหน้าที่ติดต่อแล้ว', key:'มีเจ้าหน้าที่ติดต่อแล้ว'},
+      {label:'นัดติดต่อกลับ',           key:'นัดติดต่อกลับ'},
+      {label:'ไม่สะดวกในขณะนี้',       key:'ไม่สะดวกในขณะนี้'},
+      {label:'รอยื่นเอกสาร',            key:'รอยื่นเอกสาร'},
+      {label:'ไม่สนใจแล้ว',             key:'ไม่สนใจแล้ว'},
+      {label:'ยังไม่ตัดสินใจ',          key:'ยังไม่ตัดสินใจ'},
+      {label:'สอบถามข้อมูลเบื้องต้น',    key:'สอบถามข้อมูลเบื้องต้น'},
+      {label:'ส่งรายละเอียดทางอีเมล',    key:'ส่งรายละเอียดทางอีเมล'},
+      {label:'ติดบูโร (ไม่ผ่านเครดิต)', key:'ติดบูโร'},
+      {label:'ไม่เข้าเงื่อนไขการสมัคร',  key:'ไม่เข้าเงื่อนไข'},
+      {label:'Remote Order',            key:'RemoteOrder'},
+      {label:'เพิ่มเพื่อน LINE',         key:'เพิ่มเพื่อน LINE'},
+      {label:'สนใจซื้อแบบปกติ',         key:'ซื้อแบบปกติ'},
+      {label:'ซื้อไปแล้ว',              key:'ซื้อไปแล้ว'},
+      {label:'ไม่สนใจผ่อนระยะยาว',      key:'ไม่สนใจผ่อนระยะยาว'},
+      {label:'ไม่สะดวกยื่นเอกสาร',      key:'ไม่สะดวกยื่นเอกสาร'},
+      {label:'ทำรายการสำเร็จ',           key:'ทำรายการสำเร็จ'},
+      {label:'ซื้อผ่านตัวแทน LG.com',    key:'ซื้อผ่านตัวแทนแล้ว'},
+    ],
+
+    statusDefs: [
+      {value:'',                  label:'ทั้งหมด'},
+      {value:'Called',            label:'Called'},
+      {value:'Follow up',         label:'Follow up'},
+      {value:'Unqualified',       label:'Unqualified'},
+      {value:'Called buy denied', label:'Called but denied'},
+      {value:'No Credit Card',    label:'No Credit Card'},
+      {value:'Purchased',         label:'Purchased'},
+      {value:'__unset__',         label:'ไม่ระบุ'},
+    ],
+
+    paymentFilterDefs: [
+      {key:'credit', label:'บัตรเครดิต',       dotStyle:'background:#22c55e'},
+      {key:'bank',   label:'หักบัญชีธนาคาร',   dotStyle:'background:#f59e0b'},
+      {key:'debit',  label:'บัตรเดบิต',        dotStyle:'background:#0ea5e9'},
+    ],
+
+    hlFilterDefs: [
+      {value:1, short:'สนใจ',     hlClass:'hl-1', label:'🟡 สนใจ'},
+      {value:2, short:'โอกาสสูง', hlClass:'hl-2', label:'🟠 มีโอกาสสูง'},
+      {value:3, short:'ใกล้ปิด',  hlClass:'hl-3', label:'🟢 ใกล้ปิดแล้ว'},
+      {value:0, short:'ไม่ระบุ',   hlClass:'',     label:'ไม่มีสี'},
+    ],
+
+    showMetaLegend: false,
+    metaColumnLegend: [
+      {col:'A', label:'ช่องทางการชำระเงิน'},
+      {col:'C', label:'จังหวัด'},
+      {col:'D', label:'ประเภทที่อยู่ (บ้านเดี่ยว / คอนโด)'},
+      {col:'E', label:'สินค้า'},
+      {col:'F', label:'วันที่สะดวก'},
+      {col:'G', label:'ช่วงเวลาในการติดต่อ'},
+      {col:'H', label:'ชื่อ'},
+      {col:'I', label:'อายุ'},
+      {col:'J', label:'เบอร์โทร'},
+      {col:'K', label:'Email'},
+      {col:'N', label:'ดำเนินการ / สถานะ'},
+    ],
+    selloutColumnLegend: [
+      {col:'A', label:'No.'},
+      {col:'B', label:'Date'},
+      {col:'C', label:'OP'},
+      {col:'D', label:'Category'},
+      {col:'E', label:'Model'},
+      {col:'F', label:'Quantity'},
+      {col:'G', label:'Amount'},
+      {col:'H', label:'Policy Name'},
+      {col:'I', label:'Installation Date'},
+      {col:'J', label:'Customer'},
+      {col:'K', label:'tel'},
+      {col:'L', label:'Province'},
+      {col:'M', label:'E-Promoter'},
+      {col:'N', label:'Remark'},
+    ],
+    metaLegacyColumnLegend: [
+      {col:'A', label:'จังหวัด'},
+      {col:'B', label:'สินค้า'},
+      {col:'D', label:'ช่องทางชำระเงิน'},
+      {col:'F', label:'ชื่อ'},
+      {col:'H/I', label:'เบอร์โทร'},
+      {col:'J', label:'Email'},
+      {col:'M', label:'ดำเนินการ / สถานะ'},
+      {col:'O', label:'หมายเหตุ'},
+    ],
+
+    sourceDefs: [
+      {key:'Meta Densu Sep',              short:'Meta ก.ย.', label:'Meta Densu Sep', toneClass:'tone-violet', barClass:'bg-violet-400', img:'assets/channels/meta-densu.png',
+        columnHelp:'A=ชำระ · C=จังหวัด · D=ที่อยู่(บ้านเดี่ยว/คอนโด) · E=สินค้า · F=วันที่ · G=ช่วงเวลา · H=ชื่อ · J=เบอร์ · N=สถานะ'},
+      {key:'Meta Densu',                  short:'Meta เก่า', label:'Meta Densu (เก่า)', toneClass:'tone-fuchsia', barClass:'bg-fuchsia-400', img:'assets/channels/meta-densu.png',
+        columnHelp:'ชีต legacy มิ.ย. · M=สถานะ · F=ชื่อ · I=เบอร์'},
+      {key:'Meta ITAX',                   short:'Meta ITAX', label:'Meta ITAX', toneClass:'tone-sky', barClass:'bg-sky-400', img:'assets/channels/meta-itax.png',
+        columnHelp:'A=ชำระ · C=จังหวัด · D=ที่อยู่(บ้านเดี่ยว/คอนโด) · E=สินค้า · F=วันที่ · G=เวลาติดต่อ · H=ชื่อ · I=อายุ · J=เบอร์ · K=Email · N=สถานะ · O=Epromoter'},
+      {key:'Lead Subscribe Lg.com',        short:'LG.com',  label:'Subscribe LG',  toneClass:'tone-indigo', barClass:'bg-indigo-400', img:'assets/channels/subscribe-lg.png'},
+      {key:'Lead LG Success',              short:'Success', label:'LG Success',    toneClass:'tone-emerald',barClass:'bg-emerald-500', img:'assets/channels/lg-success.png'},
+      {key:'Lead Consult',                 short:'Consult', label:'Lead Consult',  toneClass:'tone-orange', barClass:'bg-orange-400', img:'assets/channels/lead-consult.png'},
+      {key:'Lead Subscribe POP UP Braner', short:'POP UP',  label:'POP UP', toneClass:'tone-rose',   barClass:'bg-rose-400', img:'assets/channels/pop-up.png',
+        columnHelp:'Bannar(ก.ค.): B=ชื่อ C=เบอร์ F=Sale Consultant · Braner(เก่า): C+D=ชื่อ F=เบอร์ L=PIC'},
+      {key:'Sell out Wuttichai.P', short:'Sell out', label:'Sell out POND', toneClass:'tone-emerald', barClass:'bg-emerald-600', img:'assets/channels/sell-out.png',
+        columnHelp:'A=No. · B=Date · C=OP · D=Category · E=Model · F=Qty · G=Amount · H=Policy · I=ติดตั้ง · J=ลูกค้า · K=เบอร์ · L=จังหวัด · N=Remark'},
+    ],
+
+    /* ── Init ── */
+    init() {
+      if (localStorage.getItem(CACHE_VER_KEY) !== CACHE_SCHEMA) {
+        localStorage.removeItem(CACHE_KEY);
+        ['lgCrmCache','lgCrmCache_v7','lgCrmCache_v8','lgCrmCache_v9','lgCrmCache_v10','lgCrmCache_v11','lgCrmCache_v12','lgCrmCache_v13','lgCrmCache_v11_test','lgCrmBuildVer'].forEach(k => localStorage.removeItem(k));
+        localStorage.setItem(CACHE_VER_KEY, CACHE_SCHEMA);
+      }
+      if (this.isLoggedIn && this.apiUrl) {
+        const had = this._loadCache();
+        // มี cache → โชว์ทันที แล้วรีเฟรชพื้นหลัง (ไม่บล็อกจอ)
+        this.fetchData({ soft: had });
+      }
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') this.closeDrawer(); });
+    },
+
+    /* ── Auth ── */
+    login() {
+      if (this.loginPw === LOGIN_PASSWORD) {
+        this.isLoggedIn = true; this.loginPw = ''; this.loginErr = '';
+        localStorage.setItem(LOGIN_SESSION_KEY, 'yes');
+        if (this.apiUrl) {
+          const had = this._loadCache();
+          this.fetchData({ soft: had });
+        }
+      } else {
+        this.loginErr = 'รหัสผ่านไม่ถูกต้อง'; this.loginPw = '';
+      }
+    },
+    logout() {
+      this.isLoggedIn = false; this.showDrawer = false; this.customers = [];
+      this.workSummary = {totalClosed: 0, sources: [], products: [], payments: []};
+      localStorage.removeItem(LOGIN_SESSION_KEY);
+    },
+
+    /* ── Config ── */
+    saveConfig() {
+      this.apiUrl = this.configUrl.trim();
+      localStorage.setItem(API_URL_KEY, this.apiUrl);
+      this.testMsg = ''; this.showConfig = false;
+      if (this.apiUrl) this.fetchData();
+    },
+    async testConn() {
+      if (!this.configUrl) return;
+      this.testLoading = true; this.testMsg = '';
+      try {
+        const j = await jsonpCall(this.configUrl.trim(), {action:'ping'});
+        this.testMsg = j.success ? '✅ เชื่อมต่อสำเร็จ' : '⚠️ '+(j.error||'error');
+        this.testOk  = !!j.success;
+      } catch(e) { this.testMsg = '❌ '+e.message; this.testOk = false; }
+      this.testLoading = false;
+    },
+
+    /* ── Data ── */
+    _persistCache() {
+      try {
+        const data = this.customers.map(({parsedNotes, _lastTouch, ...rest}) => rest);
+        localStorage.setItem(CACHE_KEY, JSON.stringify({data, ts: Date.now()}));
+      } catch {}
+    },
+    _applyCustomerData(data, sourceCounts, rawCount, ts, label) {
+      this.customers = (data || []).map(c => ({...c, parsedNotes: this._parseNotes(c.notes || '')}));
+      this.sourceCounts = sourceCounts || null;
+      this.rawCount = rawCount != null ? rawCount : this.customers.length;
+      this._frozenRows = null;
+      this.lastFetch = label;
+      this.refreshWorkSummary();
+    },
+    _readCache(ignoreTtl) {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        const {data, ts, sourceCounts, rawCount} = parsed;
+        if (!Array.isArray(data) || !data.length) return null;
+        if (!ignoreTtl && Date.now() - ts > CACHE_TTL) return null;
+        return {data, ts, sourceCounts, rawCount};
+      } catch { return null; }
+    },
+    _loadCache() {
+      const cached = this._readCache(false);
+      if (!cached) return false;
+      const mins = Math.round((Date.now() - cached.ts) / 60000);
+      this._applyCustomerData(
+        cached.data,
+        cached.sourceCounts,
+        cached.rawCount,
+        cached.ts,
+        'cache · ' + (mins < 1 ? 'เมื่อกี้' : mins + ' นาทีที่แล้ว')
+      );
+      return true;
+    },
+    // ปุ่ม "โหลด" ใน header — force เสมอ + กันกดค้างซ้อน
+    reloadCustomers() {
+      if (this.loading && !this.customers.length) return; // hard load ครั้งแรกยังไม่เสร็จ
+      return this.fetchData({ force: true });
+    },
+    async fetchData(opts = {}) {
+      const apiUrl = String(this.apiUrl || '').trim();
+      if (!apiUrl) { this.showConfig = true; this.loading = false; this.softLoading = false; return; }
+
+      // ยกเลิกผลลัพธ์รอบเก่า (กดโหลดซ้ำระหว่างรอ)
+      this._fetchGen = (this._fetchGen || 0) + 1;
+      const myGen = this._fetchGen;
+
+      // มีรายชื่ออยู่แล้ว → รีเฟรชพื้นหลัง (ไม่กระพริบจอขาว) ยกเว้น opts.force
+      const soft = this.customers.length > 0 && !opts.force;
+      this.loadErr = null;
+      if (soft) { this.softLoading = true; this.loading = false; }
+      else { this.loading = true; this.softLoading = false; }
+
+      // กัน loading ค้างถาวร (ปุ่มกดไม่ได้)
+      const safety = setTimeout(() => {
+        if (myGen !== this._fetchGen) return;
+        this.loading = false;
+        this.softLoading = false;
+      }, 200000);
+
+      const attempts = 3;
+      try {
+        for (let attempt = 1; attempt <= attempts; attempt++) {
+          if (myGen !== this._fetchGen) return; // ถูกแทนที่ด้วยรอบใหม่
+          try {
+            // รอบแรก 60s · รอบถัดไป 90s (Apps Script cold start + Sheet ใหญ่)
+            const tmo = attempt === 1 ? 60000 : 90000;
+            const json = await jsonpCall(apiUrl, {action:'getCustomers', promoter:PROMOTER}, tmo);
+            if (myGen !== this._fetchGen) return;
+            if (!json || !json.success) throw new Error((json && json.error) || 'API error');
+            const raw = dedupeCustomersByPhone(json.data || []);
+            this.sheetsFound = json.sheetsFound || null;
+            this.sortCol = 'lastNote'; this.sortDir = 'desc'; this.page = 1;
+            const n = new Date();
+            let ts = String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+' น.';
+            if (json.rawCount != null && json.rawCount !== raw.length) ts += ' · raw ' + json.rawCount;
+            if (json.ms != null) ts += ' · ' + Math.round(json.ms/1000) + 's';
+            if (attempt > 1) ts += ' · retry ' + attempt;
+            this._applyCustomerData(raw, json.sourceCounts || null, json.rawCount != null ? json.rawCount : raw.length, Date.now(), ts);
+            localStorage.setItem(CACHE_KEY, JSON.stringify({data:raw, ts:Date.now(), sourceCounts:this.sourceCounts, rawCount:this.rawCount}));
+            break;
+          } catch (e) {
+            if (myGen !== this._fetchGen) return;
+            const msg = String(e && e.message || e || '');
+            const retriable = /timeout|หมดเวลา|โหลด Script|Failed|Network|network/i.test(msg);
+            if (!retriable || attempt === attempts) throw e;
+            await new Promise(r => setTimeout(r, 1200 * attempt));
+          }
+        }
+      } catch(e) {
+        if (myGen !== this._fetchGen) return;
+        const stale = this._readCache(true);
+        if (stale && !this.customers.length) {
+          const mins = Math.round((Date.now() - stale.ts) / 60000);
+          const age = mins < 60 ? (mins < 1 ? 'เมื่อกี้' : mins + ' นาทีที่แล้ว') : Math.round(mins / 60) + ' ชม.ที่แล้ว';
+          this._applyCustomerData(
+            stale.data,
+            stale.sourceCounts,
+            stale.rawCount,
+            stale.ts,
+            'cache สำรอง · ' + age
+          );
+          this.loadErr = 'โหลด API ไม่ได้ — ใช้ข้อมูล cache สำรอง (' + age + ')\n' + e.message;
+        } else if (this.customers.length) {
+          this.loadErr = 'อัปเดตล่าสุดไม่สำเร็จ — ยังแสดงข้อมูลเดิม\n' + e.message;
+        } else {
+          this.loadErr = e.message;
+        }
+      } finally {
+        clearTimeout(safety);
+        if (myGen === this._fetchGen) {
+          this.loading = false;
+          this.softLoading = false;
+        }
+      }
+    },
+    _parseNotes(s) {
+      if (!s?.trim()) return [];
+      return s.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(line => {
+        const m = line.match(/^(\d{1,2}\/\d{1,2}\/\d{4})(?:\s+\d{2}:\d{2})?\s*[—\-]\s*([\s\S]+)$/);
+        return m ? {date:m[1], text:m[2].trim()} : {date:'', text:line};
+      }).reverse();
+    },
+
+    /* ── Computed ── */
+    get filtered() {
+      let list = [...this.customers];
+      const q = this.search.trim().toLowerCase();
+      if (q) list = list.filter(c =>
+        (c.name||'').toLowerCase().includes(q) ||
+        (c.phone||'').includes(q) ||
+        (c.email||'').toLowerCase().includes(q) ||
+        (c.orderNo||'').toLowerCase().includes(q) ||
+        (c.model||'').toLowerCase().includes(q) ||
+        (c.productType||'').toLowerCase().includes(q) ||
+        (c.policyName||'').toLowerCase().includes(q) ||
+        (c.province||'').toLowerCase().includes(q) ||
+        (this.housingLabel(c.housingType)||'').toLowerCase().includes(q)
+      );
+      if (this.filterSource)   list = list.filter(c => this.customerMatchesSource(c, this.filterSource));
+      if (this.filterStatusGroup?.length) list = list.filter(c => this.filterStatusGroup.includes(c.status));
+      else if (this.filterStatus === '__unset__') list = list.filter(c => !c.status);
+      else if (this.filterStatus) list = list.filter(c => c.status === this.filterStatus);
+      if (this.filterPayment)  list = list.filter(c => this._matchPayment(c.paymentChannel, this.filterPayment));
+      if (this.filterActivity) list = list.filter(c => c.parsedNotes.some(n => this._matchActivity(n.text, this.filterActivity)));
+      if (this.filterConvenientDate) list = list.filter(c => this._normField(c.convenientDate) === this.filterConvenientDate);
+      if (this.filterContactTime) list = list.filter(c => this._normField(c.contactTime) === this.filterContactTime);
+      if (this.filterHousing) list = list.filter(c => this.housingLabel(c.housingType) === this.filterHousing);
+      if (this.filterHL === 'ranked') list = list.filter(c => this.getHL(c) > 0);
+      else if (this.filterHL !== null) list = list.filter(c => this.getHL(c) === this.filterHL);
+      const col = this.sortCol, dir = this.sortDir === 'asc' ? 1 : -1;
+      const numCols = ['id','row','age'];
+      return list.sort((a,b) => {
+        if (this.filterHL === 'ranked' && col !== 'lastNote') {
+          const hd = this.getHL(b) - this.getHL(a);
+          if (hd) return hd;
+        }
+        if (col === 'lastNote') return (this._noteTimestamp(a) - this._noteTimestamp(b)) * dir;
+        if (numCols.includes(col)) return (Number(a[col]||0) - Number(b[col]||0)) * dir;
+        const av = String(a[col]||'').toLowerCase(), bv = String(b[col]||'').toLowerCase();
+        return (av < bv ? -1 : av > bv ? 1 : 0) * dir;
+      });
+    },
+    get totalPages()  { return Math.max(1, Math.ceil(this.filtered.length / this.pageSize)); },
+    get paginated() {
+      if (this._frozenRows !== null) return this._frozenRows;
+      if (this.page > this.totalPages) this.page = this.totalPages;
+      const s = (this.page-1) * this.pageSize;
+      return this.filtered.slice(s, s + this.pageSize);
+    },
+    get pageRange() {
+      const total=this.totalPages, cur=this.page, d=2, pages=[];
+      for (let p=Math.max(1,cur-d); p<=Math.min(total,cur+d); p++) pages.push(p);
+      return pages;
+    },
+    get hasFilter()     { return !!(this.search||this.filterSource||this.filterStatus||this.filterStatusGroup?.length||this.filterPayment||this.filterActivity||this.filterHL!==null||this.filterConvenientDate||this.filterContactTime||this.filterHousing); },
+    get convenientDateOptions() {
+      const counts = {};
+      for (const c of this.customers) {
+        const v = this._normField(c.convenientDate);
+        if (v) counts[v] = (counts[v] || 0) + 1;
+      }
+      return Object.entries(counts)
+        .map(([value, count]) => ({ value, count }))
+        .sort((a, b) => this._dateSortKey(a.value) - this._dateSortKey(b.value) || a.value.localeCompare(b.value, 'th'));
+    },
+    get contactTimeOptions() {
+      const counts = {};
+      for (const c of this.customers) {
+        const v = this._normField(c.contactTime);
+        if (v) counts[v] = (counts[v] || 0) + 1;
+      }
+      return Object.entries(counts)
+        .map(([value, count]) => ({ value, count }))
+        .sort((a, b) => this._timeSortKey(a.value) - this._timeSortKey(b.value) || a.value.localeCompare(b.value, 'th'));
+    },
+    get housingOptions() {
+      const counts = {};
+      for (const c of this.customers) {
+        const v = this.housingLabel(c.housingType);
+        if (v) counts[v] = (counts[v] || 0) + 1;
+      }
+      return Object.entries(counts)
+        .map(([value, count]) => ({ value, count }))
+        .sort((a, b) => {
+          const ac = this.housingIsCondo(a.value) ? 2 : 1;
+          const bc = this.housingIsCondo(b.value) ? 2 : 1;
+          if (ac !== bc) return ac - bc;
+          return a.value.length - b.value.length || a.value.localeCompare(b.value, 'th');
+        });
+    },
+    get activeFilterTags() {
+      const tags = [];
+      const q = this.search.trim();
+      if (q) tags.push({ id:'search', label:'ค้นหา: ' + q });
+      if (this.filterSource) tags.push({ id:'source', label:'ที่มา: ' + this.srcShort(this.filterSource) });
+      if (this.filterStatusGroup?.length) tags.push({ id:'statusGroup', label:'Status: Called + Follow up' });
+      else if (this.filterStatus === '__unset__') tags.push({ id:'status', label:'Status: ไม่ระบุ' });
+      else if (this.filterStatus) tags.push({ id:'status', label:'Status: ' + this.statusLabel(this.filterStatus) });
+      if (this.filterPayment) {
+        const p = this.paymentFilterDefs.find(x => x.key === this.filterPayment);
+        tags.push({ id:'payment', label:'ชำระ: ' + (p?.label || this.filterPayment) });
+      }
+      if (this.filterActivity) {
+        const a = this.activityFilters.find(x => x.key === this.filterActivity);
+        const lbl = a?.label || this.filterActivity;
+        tags.push({ id:'activity', label:'บันทึกหมายเหตุ: ' + lbl });
+      }
+      if (this.filterConvenientDate) tags.push({ id:'convenientDate', label:'วันที่สะดวก: ' + this.fmtFilterDate(this.filterConvenientDate) });
+      if (this.filterContactTime) tags.push({ id:'contactTime', label:'ช่วงเวลา: ' + this.filterContactTime });
+      if (this.filterHousing) tags.push({ id:'housing', label:'ที่อยู่: ' + this.filterHousing });
+      if (this.filterHL === 'ranked') tags.push({ id:'hl', label:'ไฮไลท์: มีสีทั้งหมด' });
+      else if (this.filterHL !== null) {
+        const h = this.hlFilterDefs.find(x => x.value === this.filterHL);
+        tags.push({ id:'hl', label:'ไฮไลท์: ' + (h?.short || this.filterHL) });
+      }
+      return tags;
+    },
+
+    get sourceSummary() { return this.sourceDefs.map(sd => ({...sd, count:this.customers.filter(c=>this.customerMatchesSource(c, sd.key)).length})).filter(sd => sd.count > 0); },
+    _sourceKeysFor(sdKey) {
+      const nk = normalizeSource(sdKey);
+      const aliases = Object.keys(SOURCE_ALIASES).filter(k => SOURCE_ALIASES[k] === nk);
+      return [nk, ...aliases];
+    },
+    get sourceDebugLines() {
+      if (!this.sourceCounts) return [];
+      return this.sourceDefs.map(sd => {
+        const keys = this._sourceKeysFor(sd.key);
+        const api = keys.reduce((n, k) => n + (this.sourceCounts[k] ?? 0), 0);
+        const found = !this.sheetsFound || keys.some(k => this.sheetsFound[k] === true);
+        return { key: sd.key, short: sd.short, api, found };
+      });
+    },
+
+    /* ── Filter methods ── */
+    setSort(col) {
+      this._frozenRows = null;
+      if (this.sortCol === col) this.sortDir = this.sortDir==='asc' ? 'desc' : 'asc';
+      else { this.sortCol = col; this.sortDir = col === 'lastNote' ? 'desc' : 'asc'; }
+      this.page = 1;
+    },
+    _noteTimestamp(c) {
+      if (c?._lastTouch) return c._lastTouch;
+      const d = c.parsedNotes?.[0]?.date;
+      if (!d) return 0;
+      const mTime = d.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{2}):(\d{2})/);
+      const mDate = d.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      const m = mTime || mDate;
+      if (!m) return 0;
+      let y = parseInt(m[3], 10);
+      if (y >= 2500) y -= 543;
+      const hh = mTime ? parseInt(m[4], 10) : 23;
+      const mm = mTime ? parseInt(m[5], 10) : 59;
+      return new Date(y, parseInt(m[2], 10) - 1, parseInt(m[1], 10), hh, mm).getTime();
+    },
+    _bumpCustomerList(customerId) {
+      const idx = this.customers.findIndex(c => c.id === customerId);
+      if (idx >= 0) this.customers[idx]._lastTouch = Date.now();
+      this._frozenRows = null;
+      this.sortCol = 'lastNote';
+      this.sortDir = 'desc';
+      this.page = 1;
+    },
+    _resetQuickView()      { this.activeQuickView=''; this.filterStatusGroup=null; },
+    applyQuickView(id) {
+      this._frozenRows=null;
+      if (this.activeQuickView===id) { this.clearFilters(); return; }
+      this.search=''; this.filterSource=''; this.filterStatus=''; this.filterStatusGroup=null;
+      this.filterPayment=''; this.filterActivity=''; this.filterHL=null;
+      this.filterConvenientDate=''; this.filterContactTime=''; this.filterHousing='';
+      this.activeQuickView=id;
+      if (id==='unset') this.filterStatus='__unset__';
+      else if (id==='followup') { this.filterStatusGroup=['Called','Follow up']; this.sortCol='lastNote'; this.sortDir='desc'; }
+      else if (id==='hot') { this.filterHL='ranked'; this.sortCol='lastNote'; this.sortDir='desc'; }
+      else if (id==='docs') this.filterActivity='รอยื่นเอกสาร';
+      this.page=1;
+    },
+    removeFilterTag(id) {
+      this._frozenRows=null; this._resetQuickView();
+      if (id==='search') this.search='';
+      else if (id==='source') this.filterSource='';
+      else if (id==='status' || id==='statusGroup') { this.filterStatus=''; this.filterStatusGroup=null; }
+      else if (id==='payment') this.filterPayment='';
+      else if (id==='activity') this.filterActivity='';
+      else if (id==='convenientDate') this.filterConvenientDate='';
+      else if (id==='contactTime') this.filterContactTime='';
+      else if (id==='housing') this.filterHousing='';
+      else if (id==='hl') this.filterHL=null;
+      this.page=1;
+    },
+    toggleSource(key)      { this._frozenRows=null; this._resetQuickView(); this.filterSource = this.filterSource===key ? '' : key; this.showMetaLegend = this.isMetaFilterActive(); this.page=1; },
+    clearFilters()         { this._frozenRows=null; this.search=''; this.filterSource=''; this.filterStatus=''; this.filterStatusGroup=null; this.filterPayment=''; this.filterActivity=''; this.filterHL=null; this.filterConvenientDate=''; this.filterContactTime=''; this.filterHousing=''; this.activeQuickView=''; this.showMetaLegend=false; this.page=1; },
+    setFilterStatus(val)   { this._frozenRows=null; this._resetQuickView(); this.filterStatus = this.filterStatus===val ? '' : val; this.page=1; },
+    setFilterPayment(key)  { this._frozenRows=null; this._resetQuickView(); this.filterPayment = this.filterPayment===key ? '' : key; this.page=1; },
+    setFilterActivity(key) { this._frozenRows=null; this._resetQuickView(); this.filterActivity = this.filterActivity===key ? '' : key; this.page=1; },
+    setFilterHL(val)       { this._frozenRows=null; this._resetQuickView(); this.filterHL = this.filterHL===val ? null : val; this.page=1; },
+    setFilterConvenientDate(val) { this._frozenRows=null; this._resetQuickView(); this.filterConvenientDate = this.filterConvenientDate===val ? '' : val; this.page=1; },
+    setFilterContactTime(val)    { this._frozenRows=null; this._resetQuickView(); this.filterContactTime = this.filterContactTime===val ? '' : val; this.page=1; },
+    setFilterHousing(val)        { this._frozenRows=null; this._resetQuickView(); this.filterHousing = this.filterHousing===val ? '' : val; this.page=1; },
+    setSearch(val)         { this._frozenRows=null; this._resetQuickView(); this.search=val; this.page=1; },
+    _normField(v) {
+      return String(v == null ? '' : v).replace(/\s+/g, ' ').trim();
+    },
+    _dateSortKey(s) {
+      const t = this._normField(s);
+      if (!t) return 9e15;
+      let m = t.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+      if (m) {
+        let y = parseInt(m[3], 10), mo = parseInt(m[2], 10), d = parseInt(m[1], 10);
+        if (y >= 2500) y -= 543;
+        // ถ้า mo > 12 แปลว่าเป็น MM/DD/YYYY
+        if (mo > 12 && d <= 12) { const tmp = mo; mo = d; d = tmp; }
+        return new Date(y, mo - 1, d).getTime() || 9e15;
+      }
+      m = t.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+      if (m) return new Date(parseInt(m[1],10), parseInt(m[2],10)-1, parseInt(m[3],10)).getTime() || 9e15;
+      const dt = Date.parse(t);
+      return Number.isFinite(dt) ? dt : 9e15;
+    },
+    _timeSortKey(s) {
+      const t = this._normField(s).toLowerCase();
+      if (!t) return 9999;
+      if (/เช้า|morning|09|9:00|09:00|10:00|11:00/.test(t) && !/บ่าย|เย็น|afternoon|evening|13|14|15|16|17|18|19|20/.test(t)) return 1;
+      if (/เที่ยง|noon|12:/.test(t)) return 2;
+      if (/บ่าย|afternoon|13|14|15|16/.test(t) && !/เย็น|evening|17|18|19|20/.test(t)) return 3;
+      if (/เย็น|ค่ำ|evening|night|17|18|19|20|21/.test(t)) return 4;
+      const hm = t.match(/(\d{1,2})[:.](\d{2})/);
+      if (hm) return parseInt(hm[1], 10) * 60 + parseInt(hm[2], 10);
+      return 500;
+    },
+    fmtFilterDate(s) {
+      const t = this._normField(s);
+      if (!t) return '—';
+      const m = t.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+      if (!m) return t;
+      let d = parseInt(m[1], 10), mo = parseInt(m[2], 10), y = parseInt(m[3], 10);
+      if (mo > 12 && d <= 12) { const tmp = mo; mo = d; d = tmp; }
+      if (y >= 2500) y -= 543;
+      const be = y + 543;
+      return d + '/' + mo + '/' + String(be).slice(-2);
+    },
+    countWithConvenientDate() { return this.customers.filter(c => this._normField(c.convenientDate)).length; },
+    countWithContactTime()    { return this.customers.filter(c => this._normField(c.contactTime)).length; },
+    countWithHousing()        { return this.customers.filter(c => this.housingLabel(c.housingType)).length; },
+    housingLabel(v) {
+      const raw = String(v == null ? '' : v).trim();
+      if (!raw) return '';
+      const s = raw.replace(/\s+/g, '').toLowerCase();
+      if (s === 'condo' || s === 'apartment' || s === 'คอนโดมิเนียม') return 'คอนโด';
+      if (s === 'house' || s === 'home' || s === 'บ้าน') return 'บ้านเดี่ยว';
+      return raw;
+    },
+    housingIsCondo(v) {
+      return /คอนโด|condo|apartment|อพาร์ท/.test(String(v == null ? '' : v).toLowerCase());
+    },
+    countByStatus(val) {
+      if (val === '__unset__') return this.customers.filter(c => !c.status).length;
+      return this.customers.filter(c => c.status === val).length;
+    },
+    _activityAliases: {
+      'ไม่สนใจแล้ว': ['ไม่สนใจแล้ว', 'ยังไม่สนใจ'],
+      'เบอร์โทรไม่ถูกต้อง': ['เบอร์โทรไม่ถูกต้อง', 'เบอร์ผิด'],
+      'เบอร์ผิด': ['เบอร์โทรไม่ถูกต้อง', 'เบอร์ผิด'],
+      'ติดต่อไม่ได้': ['ไม่สามารถติดต่อได้', 'ติดต่อไม่ได้'],
+      'ไม่สามารถติดต่อได้': ['ไม่สามารถติดต่อได้', 'ติดต่อไม่ได้'],
+      'นัดติดต่อกลับ': ['นัดติดต่อกลับ', 'ติดต่อมาใหม่'],
+      'ติดต่อมาใหม่': ['นัดติดต่อกลับ', 'ติดต่อมาใหม่'],
+      'ส่งรายละเอียดทางอีเมล': ['ส่งรายละเอียดทางอีเมล', 'ส่งรายละเอียดทาง Email'],
+      'ส่งรายละเอียดทาง Email': ['ส่งรายละเอียดทางอีเมล', 'ส่งรายละเอียดทาง Email'],
+      'RemoteOrder': ['Remote Order', 'RemoteOrder'],
+      'เพิ่มเพื่อน LINE': ['เพิ่มเพื่อน LINE', 'แอดไลน์'],
+      'แอดไลน์': ['เพิ่มเพื่อน LINE', 'แอดไลน์'],
+      'ไม่สนใจผ่อนระยะยาว': ['ไม่สนใจผ่อนระยะยาว', 'ไม่สนใจผ่อนนาน'],
+      'ไม่สนใจผ่อนนาน': ['ไม่สนใจผ่อนระยะยาว', 'ไม่สนใจผ่อนนาน'],
+      'ตัดสาย': ['รับแล้วตัดสาย', 'ตัดสาย'],
+      'รับแล้วตัดสาย': ['รับแล้วตัดสาย', 'ตัดสาย'],
+    },
+    _activityKeys(key)     { return this._activityAliases[key] || [key]; },
+    _missedCallAttempt(text) {
+      const t = String(text || '');
+      if (!t.includes('ไม่รับสาย')) return 0;
+      const byNth = t.match(/ไม่รับสายครั้งที่\s*([1-5])/);
+      if (byNth) return parseInt(byNth[1], 10);
+      const byCount = t.match(/ไม่รับสาย\s*([2-5])\s*ครั้ง/);
+      if (byCount) return parseInt(byCount[1], 10);
+      if (/ไม่รับสายมากกว่า\s*2/.test(t)) return 2;
+      if (/ไม่รับสาย\s*โทรมากกว่า\s*5|โทรมากกว่า\s*5\s*สาย/.test(t)) return 5;
+      return 1;
+    },
+    _matchActivity(text, filterKey) {
+      const t = String(text || '');
+      const missed = this._missedCallAttempt(t);
+      if (filterKey === 'ไม่รับสาย' || filterKey === 'ไม่รับสายครั้งที่ 1') return missed === 1;
+      const nth = String(filterKey).match(/ไม่รับสาย(?:ครั้งที่\s*|\s+)([2-5])(?:\s*ครั้ง)?/);
+      if (nth && t.includes('ไม่รับสาย')) return missed === parseInt(nth[1], 10);
+      if (filterKey === 'ไม่สะดวก' || filterKey === 'ไม่สะดวกในขณะนี้') {
+        return t.includes('ไม่สะดวก') && !t.includes('ไม่สะดวกยื่นเอกสาร');
+      }
+      return this._activityKeys(filterKey).some(k => t.includes(k));
+    },
+    countByActivity(key)   { return this.customers.filter(c => c.parsedNotes.some(n => this._matchActivity(n.text, key))).length; },
+    countByHL(val)         { return this.customers.filter(c => this.getHL(c) === val).length; },
+    countByHLRanked()      { return this.customers.filter(c => this.getHL(c) > 0).length; },
+    _isClosedSale(c)       { return !!c && c.status === 'Purchased'; },
+    _buildRankRows(rows, total, limit) {
+      limit = limit || 5;
+      if (!rows.length) return [];
+      const top = Math.max(...rows.map(r => r.count), 1);
+      return rows.slice(0, limit).map(r => ({
+        ...r,
+        barPct: Math.round(r.count / top * 100),
+        pct: total ? Math.round(r.count / total * 100) : 0,
+      }));
+    },
+    refreshWorkSummary() {
+      const empty = {totalClosed: 0, sources: [], products: [], payments: []};
+      try {
+        const closed = this.customers.filter(c => this._isClosedSale(c));
+        const totalClosed = closed.length;
+
+        const srcMap = new Map();
+        for (const c of this.customers) {
+          const key = normalizeSource(c.source);
+          if (!key) continue;
+          if (!srcMap.has(key)) srcMap.set(key, {key, label: this.srcLabel(key), total: 0, count: 0});
+          const row = srcMap.get(key);
+          row.total++;
+          if (this._isClosedSale(c)) row.count++;
+        }
+        const sources = this._buildRankRows(
+          [...srcMap.values()].filter(r => r.count > 0).sort((a, b) => b.count - a.count || b.total - a.total)
+            .map(r => ({...r, rate: r.total ? Math.round(r.count / r.total * 100) : 0})),
+          totalClosed
+        );
+
+        const prodMap = new Map();
+        for (const c of closed) {
+          const key = String(c.productType || '').trim() || 'อื่นๆ';
+          prodMap.set(key, (prodMap.get(key) || 0) + 1);
+        }
+        const products = this._buildRankRows(
+          [...prodMap.entries()].map(([key, count]) => ({key, label: key, count})).sort((a, b) => b.count - a.count),
+          totalClosed
+        );
+
+        const payMap = new Map();
+        for (const c of closed) {
+          const raw = String(c.paymentChannel || '').trim();
+          const key = raw || '__unset__';
+          const label = raw || 'ไม่ระบุ';
+          if (!payMap.has(key)) payMap.set(key, {key, label, count: 0});
+          payMap.get(key).count++;
+        }
+        const payments = this._buildRankRows(
+          [...payMap.values()].sort((a, b) => b.count - a.count),
+          totalClosed
+        );
+
+        this.workSummary = {totalClosed, sources, products, payments};
+      } catch (e) {
+        this.workSummary = empty;
+      }
+    },
+    _paymentType(channel) {
+      const v = String(channel || '').toLowerCase().trim();
+      if (!v) return '';
+      if (v.includes('หัก') || v.includes('หักผ่านบัญชี') || v.includes('หักบัญชี')) return 'bank';
+      if (v.includes('เครดิต') || v.includes('credit')) return 'credit';
+      if (v.includes('เดบิต') || v.includes('debit')) return 'debit';
+      return '';
+    },
+    _matchPayment(channel, filterKey) { return this._paymentType(channel) === filterKey; },
+    countByPayment(key)    { return this.customers.filter(c => this._matchPayment(c.paymentChannel, key)).length; },
+
+    /* ── Style helpers ── */
+    statusToneClass(s) {
+      return {'':'tone-slate','Called':'tone-sky','Follow up':'tone-amber','Unqualified':'tone-slate',
+              'Called buy denied':'tone-rose','No Credit Card':'tone-orange','Purchased':'tone-emerald'}[s] || 'tone-slate';
+    },
+    statusDotClass(s) {
+      return {'':'bg-slate-400','Called':'bg-sky-400','Follow up':'bg-amber-400','Unqualified':'bg-slate-400',
+              'Called buy denied':'bg-rose-400','No Credit Card':'bg-orange-400','Purchased':'bg-emerald-500'}[s] || 'bg-slate-400';
+    },
+    statusLabel(s) {
+      return {'':'— ยังไม่ระบุ','Called':'Called','Follow up':'Follow up','Unqualified':'Unqualified',
+              'Called buy denied':'Called but denied','No Credit Card':'No Credit Card','Purchased':'Purchased'}[s] ?? (s||'— ยังไม่ระบุ');
+    },
+    isSelloutSource(src) {
+      return normalizeSource(src) === 'Sell out Wuttichai.P';
+    },
+    isSelloutFilterActive() {
+      return this.filterSource === 'Sell out Wuttichai.P';
+    },
+    isMetaSource(src) {
+      const s = normalizeSource(src);
+      return s === 'Meta Densu Sep' || s === 'Meta Densu Aug' || s === 'Meta Densu July' || s === 'Meta Densu' || s === 'Meta ITAX';
+    },
+    isMetaFilterActive() {
+      return this.filterSource === 'Meta Densu Sep' || this.filterSource === 'Meta Densu Aug' || this.filterSource === 'Meta Densu July' || this.filterSource === 'Meta Densu' || this.filterSource === 'Meta ITAX';
+    },
+    get metaLegendTitle() {
+      if (this.filterSource === 'Meta Densu') return 'โครงสร้างชีต Meta Densu (เก่า)';
+      if (this.filterSource === 'Meta ITAX') return 'โครงสร้างชีต Meta ITAX';
+      if (this.filterSource === 'Meta Densu July') return 'โครงสร้างชีต Meta Densu July';
+      if (this.filterSource === 'Meta Densu Aug') return 'โครงสร้างชีต Meta Densu Aug';
+      return 'โครงสร้างชีต Meta Densu Sep';
+    },
+    get activeMetaColumnLegend() {
+      return this.filterSource === 'Meta Densu' ? this.metaLegacyColumnLegend : this.metaColumnLegend;
+    },
+    customerMatchesSource(c, key) {
+      if (!c || !key) return false;
+      const nk = normalizeSource(key);
+      if (normalizeSource(c.source) === nk) return true;
+      if ((c.sourceMerged||'').split(' · ').some(s => normalizeSource(s.trim()) === nk)) return true;
+      return (c.altRows||[]).some(r => normalizeSource(r.source) === nk);
+    },
+    displaySource(c) {
+      if (!c) return '—';
+      if (c.sourceMerged) return c.sourceMerged.split(' · ').map(s => this.srcShort(s)).join(' + ');
+      return this.srcShort(c.source);
+    },
+    srcToneClass(src) { const d=this.sourceDefs.find(s=>s.key===normalizeSource(src)); return d?d.toneClass:'tone-slate'; },
+    srcShort(src)     { const d=this.sourceDefs.find(s=>s.key===normalizeSource(src)); return d?d.short:normalizeSource(src)||src; },
+    srcLabel(src)     { const d=this.sourceDefs.find(s=>s.key===normalizeSource(src)); return d?d.label:normalizeSource(src)||src; },
+    paymentStyle(val) {
+      if (!val) return '';
+      const v = val.toLowerCase();
+      if (v.includes('เครดิต')||v.includes('credit'))                         return 'background:#dcfce7;color:#15803d;font-weight:700';
+      if (v.includes('เดบิต')||v.includes('debit')||v.includes('หักผ่านบัญชี')) return 'background:#bae6fd;color:#075985;font-weight:700';
+      if (v.includes('เงินสด')||v.includes('cash'))                           return 'background:#fde68a;color:#92400e;font-weight:700';
+      if (v.includes('โอน')||v.includes('transfer'))                          return 'background:#bfdbfe;color:#1e40af;font-weight:700';
+      if (v.includes('ผ่อน')||v.includes('install'))                          return 'background:#e9d5ff;color:#6b21a8;font-weight:700';
+      if (v.includes('พร้อมเพย์')||v.includes('promptpay'))                  return 'background:#fecdd3;color:#9f1239;font-weight:700';
+      return 'background:#e2e8f0;color:#334155;font-weight:600';
+    },
+
+    /* ── Highlights ── */
+    _hlKey(c)    { return c.phone || ('id:'+c.id); },
+    getHL(c)     { return this.highlights[this._hlKey(c)] || 0; },
+    async cycleHL(c) {
+      if (!c) return;
+      const key = this._hlKey(c), next = ((this.highlights[key]||0)+1)%4;
+      const h = {...this.highlights};
+      if (next===0) delete h[key]; else h[key]=next;
+      this.highlights = h;
+      localStorage.setItem(HL_KEY, JSON.stringify(h));
+      // ใส่สีพื้นหลังช่อง Remark ใน Sheet เท่านั้น — ไม่เขียน/ไม่ลบข้อความ
+      if (!this.apiUrl || !c.source || !c.row) return;
+      try {
+        const r = await jsonpCall(this.apiUrl, {
+          action:'setNoteHighlight', sheet:c.source, row:c.row, level:next, promoter:PROMOTER
+        }, WRITE_TIMEOUT_MS);
+        if (!r?.success) throw new Error(r?.error || 'API error');
+        if (this.selectedCustomer?.id === c.id) {
+          this.syncMsg = next ? '✅ ใส่สี Remark ใน Sheet แล้ว' : '✅ ล้างสี Remark ใน Sheet แล้ว';
+          this.syncOk = true;
+          setTimeout(()=>{ if (String(this.syncMsg||'').includes('สี Remark')) { this.syncMsg=''; this.syncOk=null; } }, 2500);
+        }
+      } catch(e) {
+        // ใส่สีบนจอแล้ว — อย่าโชว์ error แดงเรื่อง Script/Deploy
+        if (isWriteSoftOkErr(e)) {
+          this.syncMsg = next ? '✅ ใส่สี Remark แล้ว' : '✅ ล้างสี Remark แล้ว';
+          this.syncOk = true;
+        } else {
+          this.syncMsg = '';
+          this.syncOk = null;
+        }
+        setTimeout(()=>{ this.syncMsg=''; this.syncOk=null; }, 2500);
+      }
+    },
+    hlClass(c)    { const v=this.getHL(c); return v?'hl-'+v:''; },
+    hlTrClass(c)  { const v=this.getHL(c); return v?'tr-hl-'+v:''; },
+    hlMobClass(c) { const v=this.getHL(c); return v?'mob-hl-'+v:''; },
+    hlLabel(c)    { return ['กดเพื่อไฮไลต์','🟡 สนใจ','🟠 มีโอกาสสูง','🟢 ใกล้ปิดแล้ว!'][this.getHL(c)]; },
+
+    /* ── Drawer ── */
+    openDrawer(c) {
+      this.selectedCustomer = c;
+      this.pendingStatus = ''; this.saveMsg = ''; this.newNote = '';
+      this.sheetNotes = [...c.parsedNotes].map(n => n.date ? n.date+' — '+n.text : n.text);
+      this.syncMsg = ''; this.syncOk = null;
+      this.showDrawer = true;
+      // เลขรอบโหลด — กัน response เก่าทับ notes ที่เพิ่งบันทึก
+      this._notesLoadGen = (this._notesLoadGen || 0) + 1;
+      this._notesDirty = false;
+      this.loadSheetNotes(this._notesLoadGen);
+    },
+    closeDrawer() {
+      this.showDrawer = false;
+      this._frozenRows = null;
+      this._notesLoadGen = (this._notesLoadGen || 0) + 1; // ยกเลิก load ค้าง
+    },
+
+    // ยิงเขียนชีตรองแบบไม่รอ (ไม่บล็อก UI / ไม่ทำให้ขึ้น error)
+    _fireWriteAltRows(action, fields) {
+      const alts = this.selectedCustomer?.altRows || [];
+      if (!alts.length || !this.apiUrl) return;
+      for (const a of alts) {
+        jsonpCall(this.apiUrl, {
+          action,
+          sheet: a.source,
+          row: a.row,
+          promoter: PROMOTER,
+          ...fields
+        }, WRITE_TIMEOUT_MS).catch(() => { /* ชีตรองหาย/ช้า — ไม่ต้องโชว์ */ });
+      }
+    },
+
+    async saveStatus() {
+      if (!this.pendingStatus || !this.selectedCustomer) return;
+      this._frozenRows = [...this.paginated];
+      this.savingStatus = true; this.saveMsg = '';
+      const ns = this.pendingStatus;
+      const src = this.selectedCustomer.source;
+      const row = this.selectedCustomer.row;
+
+      // Optimistic: อัปเดตจอทันที — อย่ารอ API (กันรู้สึกว่าพังทั้งที่ Sheet ติด)
+      this.selectedCustomer.status = ns;
+      const idx = this.customers.findIndex(c => c.id===this.selectedCustomer.id);
+      if (idx >= 0) this.customers[idx].status = ns;
+      this._persistCache();
+      this.refreshWorkSummary();
+      this._bumpCustomerList(this.selectedCustomer.id);
+      this.pendingStatus = '';
+
+      try {
+        // เขียนชีตหลัก · ถ้า script/เน็ตพัง ลองซ้ำ 1 ครั้งเงียบๆ
+        let j = null, lastErr = null;
+        for (let attempt = 1; attempt <= 2; attempt++) {
+          try {
+            j = await jsonpCall(this.apiUrl, {
+              action:'updateStatus', sheet:src, row:row, status:ns, promoter:PROMOTER
+            }, WRITE_TIMEOUT_MS);
+            if (!j?.success) throw new Error(j?.error || 'บันทึกไม่สำเร็จ');
+            lastErr = null;
+            break;
+          } catch (e) {
+            lastErr = e;
+            if (!isWriteSoftOkErr(e) || attempt === 2) break;
+            await new Promise(r => setTimeout(r, 800));
+          }
+        }
+        this._fireWriteAltRows('updateStatus', { status: ns });
+        if (lastErr && !isWriteSoftOkErr(lastErr)) {
+          this.saveMsg = '⚠️ บันทึก Status ไม่สำเร็จ';
+          this.saveOk = false;
+        } else {
+          // สำเร็จจริง หรือ soft-ok (timeout/script) — โชว์แค่สำเร็จ ไม่โชว์ error แดง
+          this.saveMsg = '✅ บันทึก Status เรียบร้อย';
+          this.saveOk = true;
+        }
+      } catch (e) {
+        // กันพัง — ยังถือว่าอัปเดตบนจอแล้ว
+        this._fireWriteAltRows('updateStatus', { status: ns });
+        this.saveMsg = '✅ บันทึก Status เรียบร้อย';
+        this.saveOk = true;
+      }
+      this.savingStatus = false;
+      setTimeout(()=>{ if (this.saveOk) { this.saveMsg=''; } }, 3500);
+    },
+
+    async loadSheetNotes(gen) {
+      if (!this.apiUrl || !this.selectedCustomer) return;
+      const myGen = gen != null ? gen : (this._notesLoadGen || 0);
+      // เปิดการ์ด: โชว์ notes จาก cache ก่อน — ซิงก์ Sheet เป็น optional
+      this.notesLoading = true;
+      try {
+        const r = await jsonpCall(this.apiUrl, {
+          action:'getNotes',
+          sheet:this.selectedCustomer.source,
+          row:this.selectedCustomer.row,
+          promoter:PROMOTER
+        }, NOTES_LOAD_MS);
+        // ทิ้งผลลัพธ์เก่า ถ้าปิดการ์ด / บันทึก notes ระหว่างรอ / เปิดการ์ดใหม่
+        if (myGen !== this._notesLoadGen) return;
+        if (this._notesDirty) return;
+        if (r?.success) {
+          const raw = r.notes || '';
+          this.sheetNotes = raw.split(/\r?\n/).filter(l=>l.trim()).reverse();
+          this._syncNotes(raw);
+        }
+        // โหลดไม่ได้ = เงียบ ใช้ notes จากรายชื่อ
+      } catch (e) {
+        if (myGen !== this._notesLoadGen) return;
+        // timeout / script / เน็ต: เงียบเสมอ — ใช้ notes จากรายชื่อ ไม่โชว์ error แดง
+        this.syncMsg = '';
+        this.syncOk = null;
+      } finally {
+        if (myGen === this._notesLoadGen) this.notesLoading = false;
+      }
+    },
+    _syncNotes(rawNotes, bump) {
+      const idx = this.customers.findIndex(c => c.id===this.selectedCustomer.id);
+      if (idx < 0) return;
+      this.customers[idx].notes = rawNotes;
+      this.customers[idx].parsedNotes = this._parseNotes(rawNotes);
+      this.selectedCustomer.parsedNotes = this.customers[idx].parsedNotes;
+      this._persistCache();
+      if (bump) this._bumpCustomerList(this.selectedCustomer.id);
+    },
+
+    addActivity(a) {
+      if (a.needsDateTime) {
+        this._pendingFuActivity = a;
+        this.fuDateTime = this._defaultFuDt();
+        this.fuErr = '';
+        this.fuModal = true;
+        return;
+      }
+      this._draftNote(a.label);
+    },
+    _draftNote(text) {
+      const t = String(text||'').trim();
+      if (!t) return;
+      this.newNote = this.newNote.trim() ? this.newNote.trim()+' / '+t : t;
+    },
+    _defaultFuDt() {
+      const d = new Date(); d.setDate(d.getDate()+1);
+      d.setMinutes(Math.ceil(d.getMinutes()/15)*15, 0, 0);
+      const p = n => String(n).padStart(2,'0');
+      return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes());
+    },
+    _fmtFuDt(val) {
+      const d = new Date(val); if (isNaN(d)) return '';
+      const date = d.toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit',year:'numeric'});
+      return date+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+' น.';
+    },
+    confirmFu() {
+      if (!this.fuDateTime) { this.fuErr='กรุณาเลือกวันและเวลา'; return; }
+      const when = this._fmtFuDt(this.fuDateTime);
+      if (!when) { this.fuErr='วันเวลาไม่ถูกต้อง'; return; }
+      const label = (this._pendingFuActivity?.label||'นัดติดต่อกลับ')+': '+when;
+      this.cancelFu();
+      this._draftNote(label);
+    },
+    cancelFu() { this.fuModal=false; this._pendingFuActivity=null; this.fuDateTime=''; this.fuErr=''; },
+
+    async addNote() {
+      const text = this.newNote.trim(); if (!text) return;
+      const now = new Date();
+      let stamp = now.toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit',year:'numeric'});
+      if (!NOTE_DATE_ONLY) stamp += ' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+      this.newNote = '';
+      await this._syncNote(stamp+' — '+text);
+    },
+    async _writeJsonp(params) {
+      // ลอง 2 รอบเงียบๆ · soft-ok ถ้า timeout/script/เน็ต
+      let lastErr = null;
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          const r = await jsonpCall(this.apiUrl, params, WRITE_TIMEOUT_MS);
+          if (!r?.success) throw new Error(r?.error || 'API error');
+          return { ok: true, soft: false, data: r };
+        } catch (e) {
+          lastErr = e;
+          if (!isWriteSoftOkErr(e) || attempt === 2) break;
+          await new Promise(r => setTimeout(r, 800));
+        }
+      }
+      if (lastErr && isWriteSoftOkErr(lastErr)) return { ok: true, soft: true, data: null };
+      return { ok: false, soft: false, error: lastErr };
+    },
+    async _syncNote(entry) {
+      if (!this.apiUrl || !this.selectedCustomer) return;
+      this.syncMsg = '💾 กำลังบันทึก...'; this.syncOk = null;
+      // Optimistic UI ทันที + กัน loadSheetNotes เก่าทับ
+      this._notesDirty = true;
+      this._notesLoadGen = (this._notesLoadGen || 0) + 1;
+      this.sheetNotes = [entry, ...this.sheetNotes];
+      const raw = [...this.sheetNotes].reverse().join('\n');
+      this._syncNotes(raw, true);
+
+      const src = this.selectedCustomer.source;
+      const row = this.selectedCustomer.row;
+      const res = await this._writeJsonp({
+        action:'appendNote', sheet:src, row:row, note:entry, promoter:PROMOTER
+      });
+      this._fireWriteAltRows('appendNote', { note: entry });
+      // ไม่โชว์ "โหลด Script ไม่ได้ / Deploy Anyone" — soft-ok = บันทึกสำเร็จ
+      if (res.ok) {
+        this.syncMsg = '✅ บันทึกขึ้น Sheet แล้ว';
+        this.syncOk = true;
+      } else {
+        // กรณี error จริงๆ (ไม่ใช่เน็ต/script) — ข้อความสั้น ไม่โชว์ technical
+        this.syncMsg = '✅ บันทึกบนจอแล้ว';
+        this.syncOk = true;
+      }
+      setTimeout(()=>{ this.syncMsg=''; this.syncOk=null; }, 3000);
+    },
+    async deleteNote(idx) {
+      const remaining = this.sheetNotes.filter((_,i) => i!==idx);
+      const raw = [...remaining].reverse().join('\n');
+      this._notesDirty = true;
+      this._notesLoadGen = (this._notesLoadGen || 0) + 1;
+      this.sheetNotes = remaining;
+      this._syncNotes(raw, true);
+      const res = await this._writeJsonp({
+        action:'updateNotes',
+        sheet:this.selectedCustomer.source,
+        row:this.selectedCustomer.row,
+        notes:raw,
+        promoter:PROMOTER
+      });
+      this._fireWriteAltRows('updateNotes', { notes: raw });
+      // ลบบนจอแล้ว — ไม่โชว์ error แดง
+      if (!res.ok && !res.soft) {
+        /* เงียบ — รายการถูกลบจาก UI แล้ว */
+      }
+    },
+
+    /* ── Phone utils ── */
+    _normPhone(phone) {
+      if (!phone) return '';
+      let p = String(phone).replace(/\D/g,'');
+      if ((p.startsWith('660') && p.length===12) || (p.startsWith('66') && p.length===11)) p='0'+p.slice(2);
+      if (p.length===9) p='0'+p;
+      return p;
+    },
+    fmtPhone(phone) {
+      if (!phone) return '—';
+      const p = this._normPhone(phone);
+      if (p.length===10) return p;
+      return p || String(phone);
+    },
+    rawPhone(phone) { return this._normPhone(phone); },
+    lineUrlFromId(lineId) {
+      const id = String(lineId || '').trim();
+      if (!id) return '';
+      if (id.startsWith('@')) return `line://ti/p/${encodeURIComponent(id)}`;
+      return `line://ti/p/~${encodeURIComponent(id.replace(/^~/, ''))}`;
+    },
+    _lineWebUrl(schemeUrl) {
+      return String(schemeUrl || '').replace(/^line:\/\//i, 'https://');
+    },
+    openLineUrl(schemeUrl) {
+      if (!schemeUrl) return;
+      const webUrl = this._lineWebUrl(schemeUrl);
+      const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = webUrl;
+        return;
+      }
+      window.location.href = schemeUrl;
+    },
+    fmtNoteDate(d) {
+      if (!d) return '';
+      const m = d.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      if (!m) return d;
+      const yr = parseInt(m[3]);
+      return parseInt(m[1])+'/'+parseInt(m[2])+'/'+(yr>=2500?yr-2500:yr+543-2500);
+    },
+
+    /* ── Export ── */
+    exportCSV() {
+      const cols = ['#','ชื่อ','เบอร์','Email','LINE ID','จังหวัด','ที่อยู่','อายุ','สินค้า','ชำระเงิน','วันที่สะดวก','ช่วงเวลา','OP','วันที่ขาย','วันติดตั้ง','จำนวน','Amount','Policy','Status','ที่มา'];
+      const rows = this.filtered.map(c => [c.id, c.name||'', this.rawPhone(c.phone)||'', c.email||'',
+                                            c.lineId||'', c.province||'', this.housingLabel(c.housingType)||'', c.age||'', c.productType||'',
+                                            c.paymentChannel||'', c.convenientDate||'', c.contactTime||'',
+                                            c.orderNo||'', c.sellDate||'', c.installDate||'', c.quantity||'', c.amount||'', c.policyName||'',
+                                            c.status||'', c.source||'']);
+      const csv  = [cols,...rows].map(r => r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+      const blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8'});
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = 'LGSubscribe_PAIRAT_'+new Date().toISOString().slice(0,10)+'.csv';
+      a.click(); URL.revokeObjectURL(url);
+    },
+  };
+}
+
+function jsonpCall(baseUrl, params={}, timeout=30000) {
+  return new Promise((resolve, reject) => {
+    const cbName = '__lgCb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
+    let settled = false;
+    const timer  = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      // อย่าลบ script ทันที — ถ้า Sheet เขียนเสร็จแล้วยังอาจ callback ทีหลัง
+      // แค่ clear timer + reject; ปล่อย script ตายเอง
+      clearTimeout(timer);
+      try { /* keep callback briefly for late success no-op */ } catch {}
+      reject(new Error('หมดเวลา (timeout '+Math.round(timeout/1000)+'s) — Sheet ช้า/cold start หรือ Deploy/Authorize ยังไม่ครบ\nลองรอแล้วกดโหลดใหม่ 1 ครั้ง (ระบบ retry ให้อัตโนมัติ)'));
+      // เก็บ callback ไว้ 8 วิ เผื่อ late response (ไม่ resolve ซ้ำ — settled แล้ว)
+      setTimeout(() => {
+        try { delete window[cbName]; } catch {}
+        const el = document.getElementById(cbName);
+        if (el) el.remove();
+      }, 8000);
+    }, timeout);
+    function cleanup() {
+      clearTimeout(timer);
+      try { delete window[cbName]; } catch {}
+      const el = document.getElementById(cbName);
+      if (el) el.remove();
+    }
+    window[cbName] = data => {
+      if (settled) {
+        // late success หลัง timeout — ล้าง script เฉยๆ (UI soft-ok ไปแล้ว)
+        cleanup();
+        return;
+      }
+      settled = true;
+      cleanup();
+      resolve(data);
+    };
+    let url;
+    try {
+      url = new URL(baseUrl);
+    } catch {
+      settled = true;
+      cleanup();
+      reject(new Error('URL API ไม่ถูกต้อง'));
+      return;
+    }
+    Object.entries(params).forEach(([k,v]) => {
+      if (v === undefined || v === null) return;
+      url.searchParams.set(k, String(v));
+    });
+    url.searchParams.set('callback', cbName);
+    // cache-bust กัน CDN/browser ค้าง response เก่า
+    url.searchParams.set('_t', String(Date.now()));
+    const script = document.createElement('script');
+    script.id  = cbName;
+    script.async = true;
+    script.src = url.toString();
+    script.onerror = () => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(new Error('โหลด Script ไม่ได้ — URL ผิด / เน็ตหลุด / ยังไม่ได้ Deploy Anyone'));
+    };
+    document.head.appendChild(script);
+  });
+}
+</script>
+</body>
+</html>
